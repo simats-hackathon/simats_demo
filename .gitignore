@@ -1,0 +1,4 @@
+# Node modules and generated caches
+node_modules/
+frontend/node_modules/
+frontend/node_modules/.cache/
