@@ -13,7 +13,7 @@ Businesses struggle to identify valuable Instagram leads and understand actionab
 A full-stack web app with:
 - Input system for Instagram usernames
 - Mock data processing for engagement metrics
-- AI analysis using Google Gemini for business classification and recommendations
+- AI analysis using local Ollama models for business classification and recommendations
 - Clean dashboard UI with lead scoring and actionable insights
 - Profile comparison feature
 
@@ -30,7 +30,7 @@ A full-stack web app with:
 
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express
-- **AI**: Google Gemini (`gemini-1.5-flash`)
+- **AI**: Ollama (`mistral` by default)
 - **Data**: Mock JSON dataset
 
 ## Installation
@@ -38,7 +38,7 @@ A full-stack web app with:
 ### Prerequisites
 - Node.js (v16 or higher)
 - npm or yarn
-- Google Gemini API key
+- Ollama installed locally
 
 ### Backend Setup
 1. Navigate to backend directory:
@@ -51,10 +51,15 @@ A full-stack web app with:
    ```
 3. Create `.env` file in backend directory:
    ```
-   GEMINI_API_KEY=your_gemini_api_key_here
    PORT=5000
+   OLLAMA_MODEL=mistral
+   OLLAMA_API_URL=http://localhost:11434/api/generate
    ```
-4. Start the backend server:
+4. Start Ollama and pull a model:
+   ```bash
+   ollama pull mistral
+   ```
+5. Start the backend server:
    ```bash
    npm run dev
    ```
@@ -83,12 +88,12 @@ A full-stack web app with:
 
 ## API Endpoints
 
-- `GET /api/profiles/:username` - returns profile analysis, engagement metrics, tags, and Gemini AI analysis
+- `GET /api/profiles/:username` - returns profile analysis, engagement metrics, tags, and Ollama AI analysis
 - `GET /api/profiles/compare/:username1/:username2` - returns two profile payloads and a comparison explanation
 
 ## How AI Works
 
-The system uses Google Gemini (`gemini-1.5-flash`) with a strict JSON prompt to analyze Instagram profiles. The AI:
+The system uses Ollama with a strict JSON prompt to analyze Instagram profiles. The AI:
 
 1. Receives profile data (username, followers, engagement, bio, tags)
 2. Classifies the business type (fitness, fashion, tech, etc.)
@@ -120,7 +125,7 @@ The app includes 7 mock profiles:
 3. Calculates engagement rate: (avg_likes + avg_comments) / followers
 4. Determines lead score based on engagement
 5. Extracts tags from bio
-6. Calls Gemini API for AI analysis
+6. Calls Ollama API for AI analysis
 7. Displays dashboard with all insights
 
 ### Comparison Feature

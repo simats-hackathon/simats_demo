@@ -1,8 +1,7 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
-const apiKey = process.env.GEMINI_API_KEY;
-const client = new GoogleGenerativeAI({ apiKey });
+const OLLAMA_API_URL = process.env.OLLAMA_API_URL || 'http://localhost:11434/api/generate';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'mistral';
 
 const escapeJsonString = (value) =>
   String(value || '')
@@ -16,13 +15,15 @@ const escapeJsonString = (value) =>
 
 const buildPrompt = (profile) => {
   const tags = Array.isArray(profile.tags) ? profile.tags : [];
-  return `You are a profile intelligence engine. Your response MUST be ONLY valid JSON with no additional text, explanation, or markdown.
+  return `You are a profile intelligence engine. Return ONLY valid JSON with no explanation, no markdown, and no extra text.
 
-Return a single JSON object with exactly these 4 keys:
-- businessClassification (string): The type of business or profile category
-- keyInsights (array of strings): 2-3 key observations about the profile
-- growthPotential (string): One of "High", "Medium", or "Low"
-- recommendedAction (string): A specific business action to take
+Return exactly this JSON shape:
+{
+  "businessClassification": "string",
+  "keyInsights": ["string", "string", "string"],
+  "growthPotential": "High|Medium|Low",
+  "recommendedAction": "string"
+}
 
 Profile data:
 ${JSON.stringify({
@@ -37,7 +38,7 @@ ${JSON.stringify({
     tags,
   }, null, 2)}
 
-IMPORTANT: Respond with ONLY the JSON object. No markdown, no explanation, no extra text.`;
+Return ONLY valid JSON.`;
 };
 
 const cleanJson = (raw) => {
@@ -55,27 +56,36 @@ const cleanJson = (raw) => {
   return null;
 };
 
-const parseJsonSafely = (raw) => {
+const parseJsonSafely = (rawText) => {
   try {
-    if (!raw || typeof raw !== 'string') {
-      console.warn('parseJsonSafely: raw is not a string:', typeof raw);
-      return null;
-    }
-    
-    const cleaned = cleanJson(raw);
-    if (!cleaned) {
-      console.warn('parseJsonSafely: Could not extract JSON from raw text');
-      console.warn('Raw text (first 200 chars):', raw.substring(0, 200));
-      return null;
-    }
-    
-    const parsed = JSON.parse(cleaned);
-    console.log('✓ Successfully parsed JSON:', Object.keys(parsed).sort().join(', '));
-    return parsed;
+    const cleaned = cleanJson(rawText);
+    return cleaned ? JSON.parse(cleaned) : null;
   } catch (error) {
-    console.error('parseJsonSafely: JSON parse error:', error.message);
+    console.error('[Ollama] JSON parse error:', error.message);
     return null;
   }
+};
+
+const callOllama = async (prompt) => {
+  const response = await fetch(OLLAMA_API_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: OLLAMA_MODEL,
+      prompt,
+      stream: false,
+      options: {
+        temperature: 0.3,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Ollama request failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  return data?.response || '';
 };
 
 const getAIInsights = async (profile) => {
@@ -83,77 +93,39 @@ const getAIInsights = async (profile) => {
     businessClassification: 'Unknown',
     keyInsights: ['Unable to evaluate the profile at this time.'],
     growthPotential: 'Unknown',
-    recommendedAction: 'Review the profile manually and ensure Gemini configuration is valid.',
+    recommendedAction: 'Review the profile manually and ensure Ollama is running.',
   };
 
-  if (!apiKey) {
-    console.error('[Gemini] GEMINI_API_KEY is not set in environment');
-    return safeDefault;
-  }
-
   try {
-    console.log(`[Gemini] Starting analysis for profile: ${profile.username}`);
-    
-    const model = client.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    console.log(`[Ollama] Starting analysis for profile: ${profile.username}`);
     const prompt = buildPrompt(profile);
-    
-    console.log('[Gemini] Sending request to Gemini API...');
-    const response = await model.generateContent({
-      contents: [{
-        role: 'user',
-        parts: [{ text: prompt }]
-      }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 500,
-      },
-    });
-
-    console.log('[Gemini] Response received from Gemini API');
-    console.log('[Gemini] Response object keys:', Object.keys(response).sort());
-    
-    // Extract text from response - Gemini API returns text() method on response
-    let rawText = '';
-    
-    if (typeof response.text === 'function') {
-      rawText = response.text();
-      console.log('[Gemini] Used response.text() method');
-    } else if (response.response && typeof response.response.text === 'function') {
-      rawText = response.response.text();
-      console.log('[Gemini] Used response.response.text() method');
-    } else if (response.candidates && response.candidates[0]) {
-      const candidate = response.candidates[0];
-      if (candidate.content && candidate.content.parts && candidate.content.parts[0]) {
-        rawText = candidate.content.parts[0].text;
-        console.log('[Gemini] Extracted from candidates[0].content.parts[0].text');
-      }
-    }
+    console.log(`[Ollama] Sending request to ${OLLAMA_MODEL} via ${OLLAMA_API_URL}`);
+    const rawText = await callOllama(prompt);
     
     if (!rawText || typeof rawText !== 'string') {
-      console.error('[Gemini] No text extracted from response. Response structure:', JSON.stringify(response, null, 2).substring(0, 500));
+      console.error('[Ollama] Empty response from model');
       return safeDefault;
     }
-    
-    console.log('[Gemini] Raw response text (first 300 chars):', rawText.substring(0, 300));
+
+    console.log('[Ollama] Raw output:', rawText.substring(0, 300));
     
     const parsed = parseJsonSafely(rawText);
     if (!parsed) {
-      console.error('[Gemini] Failed to parse JSON from response');
-      console.error('[Gemini] Raw response:', rawText);
+      console.error('[Ollama] JSON parsing failed for model output');
       return safeDefault;
     }
 
     // Validate required fields
     const requiredFields = ['businessClassification', 'keyInsights', 'growthPotential', 'recommendedAction'];
     const hasAllFields = requiredFields.every(field => field in parsed);
-    
+
     if (!hasAllFields) {
-      console.warn('[Gemini] Response missing required fields. Got:', Object.keys(parsed));
+      console.warn('[Ollama] Response missing required fields. Got:', Object.keys(parsed));
       return safeDefault;
     }
 
-    console.log('[Gemini] ✓ Analysis complete for', profile.username);
-    
+    console.log('[Ollama] Analysis complete for', profile.username);
+
     return {
       businessClassification: parsed.businessClassification || 'Unknown',
       keyInsights: Array.isArray(parsed.keyInsights)
@@ -165,13 +137,7 @@ const getAIInsights = async (profile) => {
       recommendedAction: String(parsed.recommendedAction || 'Review manually'),
     };
   } catch (error) {
-    console.error('[Gemini] Exception during API call:', error.message);
-    console.error('[Gemini] Error details:', {
-      name: error.name,
-      code: error.code,
-      status: error.status,
-      message: error.message,
-    });
+    console.error('[Ollama] Error:', error);
     return safeDefault;
   }
 };
