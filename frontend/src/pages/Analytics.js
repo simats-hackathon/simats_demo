@@ -1,28 +1,44 @@
 import React from 'react';
 
-const ChartCard = ({ title, data, accent }) => (
-  <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-    <div className="mb-5 flex items-center justify-between">
-      <div>
-        <h3 className="text-base font-semibold text-slate-900">{title}</h3>
-      </div>
-      <div className={`text-sm font-semibold text-${accent}-600`}>Live</div>
-    </div>
-    <div className="space-y-4">
-      {data.map((item) => (
-        <div key={item.label}>
-          <div className="mb-2 flex items-center justify-between text-sm text-slate-500">
-            <span>{item.label}</span>
-            <span>{item.value}%</span>
-          </div>
-          <div className="h-3 rounded-full bg-slate-100">
-            <div className={`h-3 rounded-full bg-${accent}-500`} style={{ width: `${item.value}%` }} />
-          </div>
+const ACCENT_STYLES = {
+  emerald: { text: '#059669', bar: '#10b981' },
+  sky: { text: '#0284c7', bar: '#0ea5e9' },
+  violet: { text: '#7c3aed', bar: '#8b5cf6' },
+  amber: { text: '#d97706', bar: '#f59e0b' },
+};
+
+const ChartCard = ({ title, data, accent }) => {
+  const accentStyle = ACCENT_STYLES[accent] || ACCENT_STYLES.emerald;
+
+  return (
+    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mb-5 flex items-center justify-between">
+        <div>
+          <h3 className="text-base font-semibold text-slate-900">{title}</h3>
         </div>
-      ))}
+        <div className="text-sm font-semibold" style={{ color: accentStyle.text }}>
+          Live
+        </div>
+      </div>
+      <div className="space-y-4">
+        {data.map((item) => (
+          <div key={item.label}>
+            <div className="mb-2 flex items-center justify-between text-sm text-slate-500">
+              <span>{item.label}</span>
+              <span>{item.value}%</span>
+            </div>
+            <div className="h-3 rounded-full bg-slate-100">
+              <div
+                className="h-3 rounded-full"
+                style={{ width: `${item.value}%`, backgroundColor: accentStyle.bar }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const Analytics = ({ profile }) => {
   return (
