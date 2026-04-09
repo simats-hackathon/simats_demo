@@ -84,7 +84,10 @@ const Compare = ({ profiles }) => {
             </div>
           </div>
         ))}
-      </divitems-center justify-between">
+      </div>
+
+      <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
           <div>
             <div className="text-sm uppercase tracking-[0.24em] text-slate-400">AI Comparison Summary</div>
             <div className="mt-2 text-xl font-semibold text-slate-900">{winner} is currently stronger</div>
