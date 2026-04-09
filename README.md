@@ -11,18 +11,19 @@ Businesses struggle to identify valuable Instagram leads and understand actionab
 ## Proposed Solution
 
 A full-stack web app with:
-- Input system for Instagram usernames
-- Mock data processing for engagement metrics
+- Instagram profile URL scraping through Apify
+- Post-level data processing for engagement, hashtags, and posting cadence
 - AI analysis using local Ollama models for business classification and recommendations
 - Clean dashboard UI with lead scoring and actionable insights
 - Profile comparison feature
 
 ## Features
 
-- **Profile Analysis**: Input username, get comprehensive business intelligence
+- **Profile Scraping**: Input an Instagram profile URL and fetch public post data through Apify
+- **Profile Analysis**: Use the scraped profile data to generate engagement metrics and business intelligence
 - **Lead Scoring**: High/Medium/Low based on engagement
 - **AI Insights**: Business classification, growth potential, recommended actions
-- **Tagging System**: Extract keywords from bio
+- **Tagging System**: Extract keywords from captions and bios
 - **Profile Comparison**: Compare two profiles with AI explanation
 - **Modern UI**: Clean SaaS-style dashboard with Tailwind CSS
 
@@ -30,8 +31,9 @@ A full-stack web app with:
 
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express
+- **Scraping**: Apify Instagram Scraper API
 - **AI**: Ollama (`mistral` by default)
-- **Data**: Mock JSON dataset
+- **Data**: Mock JSON dataset plus scraped Instagram post data
 
 ## Installation
 
@@ -51,7 +53,9 @@ A full-stack web app with:
    ```
 3. Create `.env` file in backend directory:
    ```
+   OPENAI_API_KEY=your_openai_api_key_here
    PORT=5000
+   APIFY_TOKEN=your_apify_api_token_here
    OLLAMA_MODEL=mistral
    OLLAMA_API_URL=http://localhost:11434/api/generate
    ```
@@ -83,13 +87,15 @@ A full-stack web app with:
 1. Start the backend server (runs on http://localhost:5000)
 2. Start the frontend (runs on http://localhost:3000)
 3. Open http://localhost:3000 in your browser
-4. Enter an Instagram username from the mock data (e.g., fitness_guru_john)
+4. Enter an Instagram profile URL for scraping or a mock username for the dashboard flows
 5. Click "Analyze" to see the dashboard
 
 ## API Endpoints
 
+- `POST /api/scrape` - accepts `{ "url": "https://www.instagram.com/<profile>/" }` and returns profile details, posts, and analysis
 - `GET /api/profiles/:username` - returns profile analysis, engagement metrics, tags, and Ollama AI analysis
 - `GET /api/profiles/compare/:username1/:username2` - returns two profile payloads and a comparison explanation
+- `GET /api/profiles/stats` - returns portfolio-level summary metrics from the mock dataset
 
 ## How AI Works
 
@@ -120,13 +126,12 @@ The app includes 7 mock profiles:
 - artist_david (Art)
 
 ### Demo Flow
-1. Enter username (e.g., "tech_startup_alex")
-2. System fetches mock data
-3. Calculates engagement rate: (avg_likes + avg_comments) / followers
-4. Determines lead score based on engagement
-5. Extracts tags from bio
-6. Calls Ollama API for AI analysis
-7. Displays dashboard with all insights
+1. Enter an Instagram profile URL for scraping or a mock username for profile analysis
+2. The backend sends the URL to Apify's Instagram Scraper API
+3. Scraped posts are normalized and cleaned
+4. The backend calculates average likes, average comments, hashtag frequency, posting frequency, and engagement rate
+5. The response includes structured profile details, raw posts, and analysis output
+6. The dashboard displays all insights
 
 ### Comparison Feature
 - Enter two usernames
@@ -146,6 +151,19 @@ The app includes 7 mock profiles:
 
 ```
 /
+├── backend/
+│   ├── app.js
+│   ├── controllers/
+│   │   └── profileController.js
+│   ├── data/
+│   │   └── mockData.json
+│   ├── routes/
+│   │   └── profileRoutes.js
+│   ├── services/
+│   │   ├── aiService.js
+│   │   ├── analysisService.js
+│   │   └── apifyService.js
+│   └── package.json
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
@@ -159,17 +177,6 @@ The app includes 7 mock profiles:
 │   │   ├── App.js
 │   │   └── index.js
 │   ├── public/
-│   └── package.json
-├── backend/
-│   ├── routes/
-│   │   └── profileRoutes.js
-│   ├── controllers/
-│   │   └── profileController.js
-│   ├── services/
-│   │   └── aiService.js
-│   ├── data/
-│   │   └── mockData.json
-│   ├── app.js
 │   └── package.json
 └── README.md
 ```

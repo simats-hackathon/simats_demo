@@ -1,39 +1,77 @@
-const analyzeData = (posts, followers) => {
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+const safeNumber = (value) => {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const getTimestamp = (post) => post?.timestamp ?? post?.takenAtTimestamp ?? post?.takenAt ?? null;
+
+const extractHashtags = (caption) => {
+  if (typeof caption !== 'string' || !caption.trim()) {
+    return [];
+  }
+
+  return caption.match(/#\w+/g) || [];
+};
+
+const analyzeData = (posts = [], followers = 0) => {
+  const safePosts = Array.isArray(posts) ? posts : [];
+  const postCount = safePosts.length;
+
+  if (postCount === 0) {
+    return {
+      avgLikes: 0,
+      avgComments: 0,
+      hashtags: [],
+      postingFrequency: 0,
+      engagementRate: 0,
+      totalLikes: 0,
+      totalComments: 0,
+    };
+  }
+
   let totalLikes = 0;
   let totalComments = 0;
-  let hashtags = [];
+  const hashtags = [];
+  const timestamps = [];
 
-  posts.forEach(post => {
-    totalLikes += post.likesCount || 0;
-    totalComments += post.commentsCount || 0;
+  safePosts.forEach((post) => {
+    totalLikes += safeNumber(post?.likesCount ?? post?.likes);
+    totalComments += safeNumber(post?.commentsCount ?? post?.comments);
+    hashtags.push(...extractHashtags(post?.caption));
 
-    // Extract hashtags
-    if (post.caption) {
-      const tags = post.caption.match(/#\w+/g);
-      if (tags) hashtags.push(...tags);
+    const timestamp = getTimestamp(post);
+    const parsedTimestamp = timestamp ? new Date(timestamp) : null;
+    if (parsedTimestamp && !Number.isNaN(parsedTimestamp.getTime())) {
+      timestamps.push(parsedTimestamp.getTime());
     }
   });
 
-  const avgLikes = totalLikes / posts.length;
-  const avgComments = totalComments / posts.length;
+  const avgLikes = totalLikes / postCount;
+  const avgComments = totalComments / postCount;
 
-  // Posting frequency
-  const dates = posts.map(p => new Date(p.timestamp)).sort((a, b) => b - a);
-  let frequency = 0;
-  if (dates.length > 1) {
-    const diffDays = (dates[0] - dates[dates.length - 1]) / (1000 * 60 * 60 * 24);
-    frequency = posts.length / diffDays;
+  let postingFrequency = 0;
+  if (timestamps.length > 1) {
+    const newest = Math.max(...timestamps);
+    const oldest = Math.min(...timestamps);
+    const spanDays = Math.max((newest - oldest) / MS_PER_DAY, 1);
+    postingFrequency = postCount / spanDays;
+  } else if (timestamps.length === 1) {
+    postingFrequency = 1;
   }
 
-  // Engagement rate
-  const engagementRate = ((avgLikes + avgComments) / followers) * 100;
+  const safeFollowers = safeNumber(followers);
+  const engagementRate = safeFollowers > 0 ? ((avgLikes + avgComments) / safeFollowers) * 100 : 0;
 
   return {
-    avgLikes,
-    avgComments,
-    hashtags,
-    postingFrequency: frequency,
-    engagementRate
+    avgLikes: Number(avgLikes.toFixed(2)),
+    avgComments: Number(avgComments.toFixed(2)),
+    hashtags: Array.from(new Set(hashtags)),
+    postingFrequency: Number(postingFrequency.toFixed(2)),
+    engagementRate: Number(engagementRate.toFixed(2)),
+    totalLikes,
+    totalComments,
   };
 };
 
