@@ -1,0 +1,86 @@
+[
+  {
+    "username": "fitness_guru_john",
+    "followers": 50000,
+    "avg_likes": 1200,
+    "avg_comments": 150,
+    "bio": "Certified personal trainer | Fitness enthusiast | Helping you achieve your goals #fitness #health",
+    "posts": [
+      {"caption": "Morning workout routine! 💪", "likes": 1300},
+      {"caption": "Healthy meal prep for the week", "likes": 1100},
+      {"caption": "Beach body tips", "likes": 1250}
+    ]
+  },
+  {
+    "username": "fashionista_sarah",
+    "followers": 75000,
+    "avg_likes": 2500,
+    "avg_comments": 300,
+    "bio": "Fashion designer | Style inspiration | Trendsetter #fashion #style #ootd",
+    "posts": [
+      {"caption": "New collection drop! 👗", "likes": 2800},
+      {"caption": "Street style vibes", "likes": 2200},
+      {"caption": "Behind the scenes", "likes": 2600}
+    ]
+  },
+  {
+    "username": "tech_startup_alex",
+    "followers": 25000,
+    "avg_likes": 800,
+    "avg_comments": 100,
+    "bio": "Founder of TechInnovate | Building the future | SaaS solutions #tech #startup #innovation",
+    "posts": [
+      {"caption": "Product launch announcement!", "likes": 900},
+      {"caption": "Team building day", "likes": 700},
+      {"caption": "Industry insights", "likes": 850}
+    ]
+  },
+  {
+    "username": "foodie_maria",
+    "followers": 100000,
+    "avg_likes": 3500,
+    "avg_comments": 400,
+    "bio": "Chef | Food blogger | Recipe creator | Delicious eats #food #cooking #recipes",
+    "posts": [
+      {"caption": "Homemade pasta recipe", "likes": 3800},
+      {"caption": "Restaurant review", "likes": 3200},
+      {"caption": "Baking tips", "likes": 3600}
+    ]
+  },
+  {
+    "username": "travel_adventurer_mike",
+    "followers": 60000,
+    "avg_likes": 1800,
+    "avg_comments": 200,
+    "bio": "Travel photographer | Adventure seeker | Exploring the world #travel #photography #adventure",
+    "posts": [
+      {"caption": "Sunset in Bali", "likes": 2000},
+      {"caption": "Hiking in the mountains", "likes": 1600},
+      {"caption": "Cultural experiences", "likes": 1900}
+    ]
+  },
+  {
+    "username": "beauty_expert_lisa",
+    "followers": 80000,
+    "avg_likes": 2200,
+    "avg_comments": 250,
+    "bio": "Beauty influencer | Skincare tips | Makeup tutorials #beauty #skincare #makeup",
+    "posts": [
+      {"caption": "Skincare routine for glowing skin", "likes": 2400},
+      {"caption": "New makeup look", "likes": 2000},
+      {"caption": "Product reviews", "likes": 2300}
+    ]
+  },
+  {
+    "username": "artist_david",
+    "followers": 30000,
+    "avg_likes": 600,
+    "avg_comments": 80,
+    "bio": "Digital artist | Illustrator | Creative mind #art #illustration #digitalart",
+    "posts": [
+      {"caption": "New artwork reveal", "likes": 650},
+      {"caption": "Process video", "likes": 550},
+      {"caption": "Fan art collaboration", "likes": 700}
+    ]
+  }
+]

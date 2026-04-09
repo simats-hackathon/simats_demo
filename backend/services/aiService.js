@@ -1,48 +1,94 @@
-const OpenAI = require('openai');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+require('dotenv').config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+const apiKey = process.env.GEMINI_API_KEY;
+const client = new GoogleGenerativeAI({ apiKey });
 
-const analyzeProfile = async (profile) => {
-  const prompt = `
-Analyze this Instagram profile and provide business intelligence insights.
+const escapeJsonString = (value) =>
+  String(value || '')
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\n/g, ' ')
+    .replace(/\r/g, ' ')
+    .replace(/\t/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
-Profile Data:
-- Username: ${profile.username}
-- Followers: ${profile.followers}
-- Average Likes: ${profile.avg_likes}
-- Average Comments: ${profile.avg_comments}
-- Bio: ${profile.bio}
-- Sample Posts: ${profile.posts.map(p => p.caption).join('; ')}
+const buildPrompt = (profile) => {
+  const tags = Array.isArray(profile.tags) ? profile.tags : [];
+  return `You are a profile intelligence engine. Respond with STRICT JSON only, no markdown, no explanation, and no extra text.\n\nReturn a single JSON object with exactly these keys: businessClassification, keyInsights, growthPotential, recommendedAction.\n\nProfile:\n${JSON.stringify({
+    username: profile.username,
+    followers: profile.followers,
+    averageLikes: profile.avg_likes,
+    averageComments: profile.avg_comments,
+    engagementRate: profile.engagementRate,
+    bio: escapeJsonString(profile.bio),
+    tags,
+  })}\n\nEnsure the output is valid JSON. Use an array for keyInsights. Use High, Medium, or Low for growthPotential.\n`;
+};
 
-Provide a JSON response with the following structure:
-{
-  "businessClassification": "e.g., fitness, fashion, tech, food, travel, beauty, art",
-  "keyInsights": "Brief summary of what makes this profile valuable",
-  "growthPotential": "High/Medium/Low with explanation",
-  "recommendedAction": "Specific action a business should take, e.g., 'Partner for sponsored posts', 'Invest in similar content', etc."
-}
-`;
+const cleanJson = (raw) => {
+  if (!raw || typeof raw !== 'string') return null;
+  let cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1) {
+    cleaned = cleaned.slice(firstBrace, lastBrace + 1);
+  }
+  return cleaned;
+};
 
+const parseJsonSafely = (raw) => {
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 300,
-    });
-
-    const content = response.choices[0].message.content.trim();
-    return JSON.parse(content);
+    const cleaned = cleanJson(raw);
+    if (!cleaned) return null;
+    return JSON.parse(cleaned);
   } catch (error) {
-    console.error('Error with OpenAI:', error);
-    return {
-      businessClassification: 'Unknown',
-      keyInsights: 'Unable to analyze',
-      growthPotential: 'Unknown',
-      recommendedAction: 'Review manually',
-    };
+    return null;
   }
 };
 
-module.exports = { analyzeProfile };
+const getAIInsights = async (profile) => {
+  const prompt = buildPrompt(profile);
+  const safeDefault = {
+    businessClassification: 'Unknown',
+    keyInsights: ['Unable to evaluate the profile at this time.'],
+    growthPotential: 'Unknown',
+    recommendedAction: 'Review the profile manually and ensure Gemini configuration is valid.',
+  };
+
+  if (!apiKey) {
+    console.error('GEMINI_API_KEY is not set.');
+    return safeDefault;
+  }
+
+  try {
+    const model = client.getGenerativeModel({ model: 'gemini-1.5-flash' });
+    const response = await model.generateContent({
+      input: prompt,
+      temperature: 0.2,
+      maxOutputTokens: 400,
+    });
+
+    const raw = response?.candidates?.[0]?.output?.[0]?.content || response?.candidates?.[0]?.content || '';
+    const parsed = parseJsonSafely(raw);
+    if (!parsed) {
+      console.error('Gemini response could not be parsed as JSON:', raw);
+      return safeDefault;
+    }
+
+    return {
+      businessClassification: parsed.businessClassification || 'Unknown',
+      keyInsights: Array.isArray(parsed.keyInsights)
+        ? parsed.keyInsights
+        : [String(parsed.keyInsights || 'No insights available.')],
+      growthPotential: String(parsed.growthPotential || 'Unknown'),
+      recommendedAction: String(parsed.recommendedAction || 'Review manually'),
+    };
+  } catch (error) {
+    console.error('Gemini AI error:', error);
+    return safeDefault;
+  }
+};
+
+module.exports = { getAIInsights };

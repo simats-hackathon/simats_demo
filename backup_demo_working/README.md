@@ -13,7 +13,7 @@ Businesses struggle to identify valuable Instagram leads and understand actionab
 A full-stack web app with:
 - Input system for Instagram usernames
 - Mock data processing for engagement metrics
-- AI analysis using Google Gemini for business classification and recommendations
+- AI analysis using OpenAI API for business classification and recommendations
 - Clean dashboard UI with lead scoring and actionable insights
 - Profile comparison feature
 
@@ -30,7 +30,7 @@ A full-stack web app with:
 
 - **Frontend**: React + Tailwind CSS
 - **Backend**: Node.js + Express
-- **AI**: Google Gemini (`gemini-1.5-flash`)
+- **AI**: OpenAI API (GPT-3.5-turbo)
 - **Data**: Mock JSON dataset
 
 ## Installation
@@ -38,7 +38,7 @@ A full-stack web app with:
 ### Prerequisites
 - Node.js (v16 or higher)
 - npm or yarn
-- Google Gemini API key
+- OpenAI API key
 
 ### Backend Setup
 1. Navigate to backend directory:
@@ -51,7 +51,7 @@ A full-stack web app with:
    ```
 3. Create `.env` file in backend directory:
    ```
-   GEMINI_API_KEY=your_gemini_api_key_here
+   OPENAI_API_KEY=your_openai_api_key_here
    PORT=5000
    ```
 4. Start the backend server:
@@ -81,16 +81,11 @@ A full-stack web app with:
 4. Enter an Instagram username from the mock data (e.g., fitness_guru_john)
 5. Click "Analyze" to see the dashboard
 
-## API Endpoints
-
-- `GET /api/profiles/:username` - returns profile analysis, engagement metrics, tags, and Gemini AI analysis
-- `GET /api/profiles/compare/:username1/:username2` - returns two profile payloads and a comparison explanation
-
 ## How AI Works
 
-The system uses Google Gemini (`gemini-1.5-flash`) with a strict JSON prompt to analyze Instagram profiles. The AI:
+The system uses OpenAI's GPT-3.5-turbo model with a structured prompt to analyze Instagram profiles. The AI:
 
-1. Receives profile data (username, followers, engagement, bio, tags)
+1. Receives profile data (username, followers, engagement, bio, posts)
 2. Classifies the business type (fitness, fashion, tech, etc.)
 3. Generates key insights about the profile's value
 4. Assesses growth potential (High/Medium/Low)
@@ -98,8 +93,9 @@ The system uses Google Gemini (`gemini-1.5-flash`) with a strict JSON prompt to 
 
 Example prompt structure:
 ```
-Provide strict JSON only with businessClassification, keyInsights, growthPotential, recommendedAction.
-Do not include markdown or extra explanation.
+Analyze this Instagram profile and provide business intelligence insights.
+Profile Data: [data]
+Provide JSON response with businessClassification, keyInsights, growthPotential, recommendedAction
 ```
 
 ## Demo Explanation
