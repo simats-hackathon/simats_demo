@@ -30,20 +30,30 @@ function App() {
               <div className="text-sm uppercase tracking-[0.24em] text-slate-500">AI Instagram Business Profile Data</div>
               <h1 className="mt-3 text-3xl font-semibold text-slate-900">{activeTab}</h1>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <label className="text-sm font-medium text-slate-600">Active profile</label>
-              <select
-                value={selectedProfile}
-                onChange={(e) => setSelectedProfile(e.target.value)}
-                className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
-              >
-                {mockProfiles.map((item) => (
-                  <option key={item.username} value={item.username}>
-                    {item.displayName}
-                  </option>
-                ))}
-              </select>
-            </div>
+           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+  <div className="flex flex-col gap-2">
+    <label className="text-sm font-medium text-slate-600">Mock profiles</label>
+    <select
+      value={selectedProfile}
+      onChange={(e) => setSelectedProfile(e.target.value)}
+      className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
+    >
+      {mockProfiles.map((item) => (
+        <option key={item.username} value={item.username}>
+          {item.displayName}
+        </option>
+      ))}
+    </select>
+  </div>
+  <div className="flex flex-col gap-2">
+    <label className="text-sm font-medium text-slate-600">Or enter Instagram URL</label>
+    <input
+      type="text"
+      placeholder="e.g., @username or instagram.com/username"
+      className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
+    />
+  </div>
+</div>
           </div>
 
           <div className="mb-6 grid gap-3 sm:grid-cols-3">
