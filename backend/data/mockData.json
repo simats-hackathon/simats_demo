@@ -82,5 +82,185 @@
       {"caption": "Process video", "likes": 550},
       {"caption": "Fan art collaboration", "likes": 700}
     ]
+  },
+  {
+    "username": "finance_coach_nina",
+    "followers": 42000,
+    "avg_likes": 1400,
+    "avg_comments": 190,
+    "bio": "Personal finance coach | Budgeting and investing tips #finance #investing #moneymindset",
+    "posts": [
+      {"caption": "50-30-20 budgeting method", "likes": 1500},
+      {"caption": "Beginner ETF guide", "likes": 1320},
+      {"caption": "Debt payoff strategy", "likes": 1410}
+    ]
+  },
+  {
+    "username": "homechef_aaron",
+    "followers": 54000,
+    "avg_likes": 2100,
+    "avg_comments": 230,
+    "bio": "Home cook | Quick recipes for busy people #food #homecooking #mealprep",
+    "posts": [
+      {"caption": "15-minute protein bowl", "likes": 2200},
+      {"caption": "One-pot pasta night", "likes": 1980},
+      {"caption": "Meal prep for weekdays", "likes": 2150}
+    ]
+  },
+  {
+    "username": "devmentor_kiran",
+    "followers": 38000,
+    "avg_likes": 1050,
+    "avg_comments": 170,
+    "bio": "Software mentor | Web dev tutorials and career tips #coding #webdev #careergrowth",
+    "posts": [
+      {"caption": "How to structure React apps", "likes": 1100},
+      {"caption": "API design fundamentals", "likes": 980},
+      {"caption": "Interview prep checklist", "likes": 1080}
+    ]
+  },
+  {
+    "username": "eco_living_ria",
+    "followers": 47000,
+    "avg_likes": 1650,
+    "avg_comments": 210,
+    "bio": "Sustainable lifestyle creator | Eco-friendly swaps #sustainability #ecoliving #zerowaste",
+    "posts": [
+      {"caption": "Plastic-free kitchen essentials", "likes": 1720},
+      {"caption": "Low-waste shopping routine", "likes": 1580},
+      {"caption": "Green home audit", "likes": 1690}
+    ]
+  },
+  {
+    "username": "photowalk_jules",
+    "followers": 91000,
+    "avg_likes": 3200,
+    "avg_comments": 280,
+    "bio": "Street and travel photographer | Visual storytelling #photography #streetphoto #creator",
+    "posts": [
+      {"caption": "Golden hour city frames", "likes": 3350},
+      {"caption": "Monochrome portrait series", "likes": 3050},
+      {"caption": "Weekend photo walk tips", "likes": 3240}
+    ]
+  },
+  {
+    "username": "momfit_priya",
+    "followers": 26000,
+    "avg_likes": 950,
+    "avg_comments": 140,
+    "bio": "Postpartum wellness coach | Fitness for moms #momfitness #wellness #healthyhabits",
+    "posts": [
+      {"caption": "10-minute home workout", "likes": 980},
+      {"caption": "Core recovery basics", "likes": 920},
+      {"caption": "Weekly wellness planner", "likes": 960}
+    ]
+  },
+  {
+    "username": "luxury_realtor_ian",
+    "followers": 120000,
+    "avg_likes": 2800,
+    "avg_comments": 260,
+    "bio": "Luxury real estate advisor | Market insights and tours #realestate #luxuryhomes #property",
+    "posts": [
+      {"caption": "Penthouse walkthrough", "likes": 2950},
+      {"caption": "Market update this week", "likes": 2660},
+      {"caption": "First-time investor tips", "likes": 2840}
+    ]
+  },
+  {
+    "username": "gadget_lab_zoe",
+    "followers": 68000,
+    "avg_likes": 2400,
+    "avg_comments": 310,
+    "bio": "Tech reviewer | Smartphones, wearables and productivity tools #techreview #gadgets #productivity",
+    "posts": [
+      {"caption": "Top budget phones 2026", "likes": 2520},
+      {"caption": "Wearable battery test", "likes": 2320},
+      {"caption": "Desk setup upgrades", "likes": 2460}
+    ]
+  },
+  {
+    "username": "yoga_with_sana",
+    "followers": 36000,
+    "avg_likes": 1500,
+    "avg_comments": 220,
+    "bio": "Yoga instructor | Mindful routines for daily life #yoga #mindfulness #wellbeing",
+    "posts": [
+      {"caption": "Morning mobility flow", "likes": 1580},
+      {"caption": "Breathing for stress relief", "likes": 1430},
+      {"caption": "Desk worker yoga set", "likes": 1490}
+    ]
+  },
+  {
+    "username": "brand_story_maya",
+    "followers": 29000,
+    "avg_likes": 870,
+    "avg_comments": 130,
+    "bio": "Brand strategist | Storytelling and content positioning #branding #marketing #contentstrategy",
+    "posts": [
+      {"caption": "Messaging framework in 3 steps", "likes": 910},
+      {"caption": "Audience persona mistakes", "likes": 830},
+      {"caption": "Offer positioning examples", "likes": 880}
+    ]
+  },
+  {
+    "username": "petcare_doc_liam",
+    "followers": 51000,
+    "avg_likes": 1750,
+    "avg_comments": 240,
+    "bio": "Veterinary educator | Practical pet care tips #petcare #dogs #cats",
+    "posts": [
+      {"caption": "Nutrition myths for pets", "likes": 1810},
+      {"caption": "Vaccination schedule explained", "likes": 1690},
+      {"caption": "Home grooming checklist", "likes": 1760}
+    ]
+  },
+  {
+    "username": "startup_ops_ren",
+    "followers": 22000,
+    "avg_likes": 760,
+    "avg_comments": 95,
+    "bio": "Startup operations advisor | Systems, hiring and growth #startup #operations #leadership",
+    "posts": [
+      {"caption": "Weekly ops dashboard template", "likes": 790},
+      {"caption": "Hiring scorecard guide", "likes": 730},
+      {"caption": "Process map for small teams", "likes": 770}
+    ]
+  },
+  {
+    "username": "dancecoach_elena",
+    "followers": 74000,
+    "avg_likes": 3000,
+    "avg_comments": 340,
+    "bio": "Dance coach | Tutorials and choreography breakdowns #dance #reels #creator",
+    "posts": [
+      {"caption": "30-second combo tutorial", "likes": 3150},
+      {"caption": "Beginner footwork drills", "likes": 2870},
+      {"caption": "Performance behind the scenes", "likes": 3020}
+    ]
+  },
+  {
+    "username": "edu_science_omar",
+    "followers": 64000,
+    "avg_likes": 2100,
+    "avg_comments": 260,
+    "bio": "Science educator | Simplifying complex concepts #science #education #learning",
+    "posts": [
+      {"caption": "Why skies change color", "likes": 2190},
+      {"caption": "Physics in daily life", "likes": 2030},
+      {"caption": "Study methods that work", "likes": 2120}
+    ]
+  },
+  {
+    "username": "minimal_design_kai",
+    "followers": 33000,
+    "avg_likes": 1180,
+    "avg_comments": 145,
+    "bio": "UI and visual design creator | Minimal systems and clean layouts #uidesign #branding #creativity",
+    "posts": [
+      {"caption": "Landing page teardown", "likes": 1230},
+      {"caption": "Typography pairings", "likes": 1110},
+      {"caption": "Design system checklist", "likes": 1190}
+    ]
   }
 ]

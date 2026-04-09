@@ -5,6 +5,20 @@ const USERNAME_PATTERN = /^[A-Za-z0-9_.]+$/;
 
 const isValidUsername = (username) => typeof username === 'string' && USERNAME_PATTERN.test(username);
 
+const inferCategoryFromProfile = (profile, tags) => {
+  const text = `${profile.bio || ''} ${(tags || []).join(' ')}`.toLowerCase();
+  if (/fitness|health|wellness|yoga|workout/.test(text)) return 'Fitness & Wellness';
+  if (/fashion|style|ootd|beauty|makeup|skincare/.test(text)) return 'Fashion & Beauty';
+  if (/tech|startup|saas|coding|webdev|gadget/.test(text)) return 'Tech & Startups';
+  if (/food|cooking|recipe|chef/.test(text)) return 'Food & Culinary';
+  if (/travel|adventure|photography|streetphoto/.test(text)) return 'Travel & Photography';
+  if (/finance|investing|money/.test(text)) return 'Finance';
+  if (/realestate|property|homes/.test(text)) return 'Real Estate';
+  if (/art|illustration|design|creator|dance/.test(text)) return 'Creative';
+  if (/education|science|mentor|learning/.test(text)) return 'Education';
+  return 'General Creator';
+};
+
 const calculateMetrics = (profile) => {
   const followers = Number(profile.followers) || 0;
   const likes = Number(profile.avg_likes) || 0;
@@ -50,10 +64,21 @@ const getProfileAnalysis = async (req, res) => {
     return res.status(500).json({
       error: 'Unable to analyze profile at this time',
       aiAnalysis: {
-        businessClassification: 'Unknown',
-        keyInsights: ['Unable to generate AI insights'],
+        businessCategory: 'Unknown',
+        businessType: 'Unknown',
+        audienceType: 'Unknown',
+        tags: [],
+        description: 'AI unavailable',
+        keyInsights: ['AI unavailable'],
+        strengths: ['AI unavailable'],
+        weaknesses: ['AI unavailable'],
         growthPotential: 'Unknown',
-        recommendedAction: 'Please try again later',
+        recommendedAction: 'Retry analysis',
+        competitorInsights: 'Unavailable',
+        contentStrategy: 'Unavailable',
+        hashtagRecommendations: [],
+        audienceBehavior: 'Unavailable',
+        whyThisWorks: ['Unavailable'],
       },
     });
   }
@@ -99,4 +124,71 @@ const compareProfiles = async (req, res) => {
   }
 };
 
-module.exports = { getProfileAnalysis, compareProfiles };
+const getPortfolioStats = async (req, res) => {
+  try {
+    const profilesWithMetrics = mockData.map((profile) => {
+      const metrics = calculateMetrics(profile);
+      return { ...profile, ...metrics };
+    });
+
+    const totalProfiles = profilesWithMetrics.length;
+    const totalFollowers = profilesWithMetrics.reduce((sum, p) => sum + (Number(p.followers) || 0), 0);
+    const avgEngagementRate =
+      totalProfiles > 0
+        ? parseFloat(
+            (
+              profilesWithMetrics.reduce((sum, p) => sum + (Number(p.engagementRate) || 0), 0) / totalProfiles
+            ).toFixed(2)
+          )
+        : 0;
+
+    const leadScoreBreakdown = profilesWithMetrics.reduce(
+      (acc, p) => {
+        acc[p.leadScore] = (acc[p.leadScore] || 0) + 1;
+        return acc;
+      },
+      { High: 0, Medium: 0, Low: 0 }
+    );
+
+    const categoryCounts = profilesWithMetrics.reduce((acc, p) => {
+      const category = inferCategoryFromProfile(p, p.tags);
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {});
+
+    const topCategory =
+      Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || 'General Creator';
+
+    const topLeadCandidates = profilesWithMetrics
+      .slice()
+      .sort((a, b) => {
+        const scoreRank = { High: 3, Medium: 2, Low: 1 };
+        const scoreDiff = (scoreRank[b.leadScore] || 0) - (scoreRank[a.leadScore] || 0);
+        if (scoreDiff !== 0) return scoreDiff;
+        return (Number(b.engagementRate) || 0) - (Number(a.engagementRate) || 0);
+      })
+      .slice(0, 5)
+      .map((p) => ({
+        username: p.username,
+        followers: p.followers,
+        engagementRate: p.engagementRate,
+        leadScore: p.leadScore,
+        category: inferCategoryFromProfile(p, p.tags),
+      }));
+
+    return res.json({
+      totalProfiles,
+      totalFollowers,
+      averageEngagementRate: avgEngagementRate,
+      leadScoreBreakdown,
+      topCategory,
+      categoryBreakdown: categoryCounts,
+      topLeadCandidates,
+    });
+  } catch (error) {
+    console.error('getPortfolioStats error:', error);
+    return res.status(500).json({ error: 'Unable to compute portfolio stats at this time' });
+  }
+};
+
+module.exports = { getProfileAnalysis, compareProfiles, getPortfolioStats };
