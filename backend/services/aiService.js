@@ -65,12 +65,17 @@ const getAIInsights = async (profile) => {
   try {
     const model = client.getGenerativeModel({ model: 'gemini-1.5-flash' });
     const response = await model.generateContent({
-      input: prompt,
-      temperature: 0.2,
-      maxOutputTokens: 400,
+      contents: [{
+        role: 'user',
+        parts: [{ text: prompt }]
+      }],
+      generationConfig: {
+        temperature: 0.2,
+        maxOutputTokens: 400,
+      },
     });
 
-    const raw = response?.candidates?.[0]?.output?.[0]?.content || response?.candidates?.[0]?.content || '';
+    const raw = response?.response?.text() || response?.response?.candidates?.[0]?.content?.parts?.[0]?.text || '';
     const parsed = parseJsonSafely(raw);
     if (!parsed) {
       console.error('Gemini response could not be parsed as JSON:', raw);

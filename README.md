@@ -120,7 +120,7 @@ The app includes 7 mock profiles:
 3. Calculates engagement rate: (avg_likes + avg_comments) / followers
 4. Determines lead score based on engagement
 5. Extracts tags from bio
-6. Calls OpenAI API for AI analysis
+6. Calls Gemini API for AI analysis
 7. Displays dashboard with all insights
 
 ### Comparison Feature

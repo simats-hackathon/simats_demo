@@ -77,8 +77,11 @@ const compareProfiles = async (req, res) => {
     const metrics1 = calculateMetrics(profile1);
     const metrics2 = calculateMetrics(profile2);
 
-    const response1 = { ...profile1, ...metrics1 };
-    const response2 = { ...profile2, ...metrics2 };
+    const aiAnalysis1 = await getAIInsights({ ...profile1, ...metrics1 });
+    const aiAnalysis2 = await getAIInsights({ ...profile2, ...metrics2 });
+
+    const response1 = { ...profile1, ...metrics1, aiAnalysis: aiAnalysis1 };
+    const response2 = { ...profile2, ...metrics2, aiAnalysis: aiAnalysis2 };
 
     const explanation =
       response1.engagementRate >= response2.engagementRate
