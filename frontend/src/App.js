@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Overview from './pages/Overview';
 import Analytics from './pages/Analytics';
@@ -9,15 +9,154 @@ import mockProfiles from './data/mockProfiles';
 import './index.css';
 
 const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report'];
+const NONE_PROFILE = '__none__';
+
+const normalizeList = (value, fallback) => {
+  if (Array.isArray(value) && value.length > 0) {
+    return value.map((item) => String(item)).filter(Boolean).slice(0, 4);
+  }
+  return fallback;
+};
+
+const formatDisplayName = (username) =>
+  String(username || '')
+    .replace(/_/g, ' ')
+    .replace(/\./g, ' ')
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+
+const extractUsername = (input) => {
+  const raw = String(input || '').trim();
+  if (!raw) return '';
+
+  if (/^https?:\/\//i.test(raw)) {
+    try {
+      const parsed = new URL(raw);
+      const parts = parsed.pathname.split('/').filter(Boolean);
+      if (parts.length > 0) {
+        return parts[0].replace(/^@+/, '').toLowerCase();
+      }
+    } catch (error) {
+      return '';
+    }
+  }
+
+  const cleaned = raw.replace(/^@+/, '').split('/')[0].trim();
+  return cleaned.toLowerCase();
+};
+
+const mapApiToProfile = (apiData, baseProfile) => {
+  const ai = apiData?.aiAnalysis || {};
+  const growth = String(ai.growthPotential || '').toLowerCase();
+  const interestLevel = growth.includes('high')
+    ? 'High'
+    : growth.includes('medium')
+      ? 'Medium'
+      : growth.includes('low')
+        ? 'Low'
+        : baseProfile.interestLevel;
+
+  return {
+    ...baseProfile,
+    username: apiData.username || baseProfile.username,
+    displayName: formatDisplayName(apiData.username || baseProfile.username) || baseProfile.displayName,
+    followers: Number(apiData.followers) || baseProfile.followers,
+    avg_likes: Number(apiData.avg_likes) || baseProfile.avg_likes,
+    avg_comments: Number(apiData.avg_comments) || baseProfile.avg_comments,
+    bio: apiData.bio || baseProfile.bio,
+    tags: normalizeList(ai.tags || apiData.tags, baseProfile.tags),
+    businessCategory: ai.businessCategory || baseProfile.businessCategory,
+    businessType: ai.businessType || baseProfile.businessType,
+    audienceType: ai.audienceType || baseProfile.audienceType,
+    businessDescription: ai.description || baseProfile.businessDescription,
+    keyInsights: normalizeList(ai.keyInsights, baseProfile.keyInsights),
+    strengths: normalizeList(ai.strengths, baseProfile.strengths),
+    weaknesses: normalizeList(ai.weaknesses, baseProfile.weaknesses),
+    growthPotential: ai.growthPotential || baseProfile.growthPotential,
+    interestLevel,
+    recommendedAction: ai.recommendedAction || baseProfile.recommendedAction,
+    competitorInsights: ai.competitorInsights || baseProfile.competitorInsights,
+    contentStrategy: ai.contentStrategy || baseProfile.contentStrategy,
+    hashtagRecommendations: normalizeList(ai.hashtagRecommendations, baseProfile.hashtagRecommendations),
+    audienceBehavior: ai.audienceBehavior || baseProfile.audienceBehavior,
+    whyThisWorks: normalizeList(ai.whyThisWorks, baseProfile.whyThisWorks || []),
+  };
+};
 
 function App() {
   const [activeTab, setActiveTab] = useState('Overview');
   const [selectedProfile, setSelectedProfile] = useState(mockProfiles[0].username);
+  const [usernameInput, setUsernameInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [profile, setProfile] = useState(mockProfiles[0]);
 
-  const profile = useMemo(
+  const selectedMockProfile = useMemo(
     () => mockProfiles.find((item) => item.username === selectedProfile) || mockProfiles[0],
     [selectedProfile]
   );
+
+  useEffect(() => {
+    if (selectedProfile !== NONE_PROFILE) {
+      setProfile(selectedMockProfile);
+      setError('');
+    }
+  }, [selectedMockProfile, selectedProfile]);
+
+  const runApiAnalysis = async (rawValue) => {
+    const username = extractUsername(rawValue);
+    if (!username) {
+      setError('No account found');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/profiles/${username}`);
+      if (!response.ok) {
+        throw new Error('profile_not_found');
+      }
+
+      const data = await response.json();
+      const matchedMock = mockProfiles.find((item) => item.username === username);
+      const baseProfile = matchedMock || profile || mockProfiles[0];
+      setProfile(mapApiToProfile(data, baseProfile));
+      setSelectedProfile(matchedMock ? matchedMock.username : NONE_PROFILE);
+    } catch (fetchError) {
+      setError('No account found');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (selectedProfile === NONE_PROFILE) {
+      await runApiAnalysis(usernameInput);
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+    setProfile(selectedMockProfile);
+    setLoading(false);
+  };
+
+  const showEnterButton = extractUsername(usernameInput).length > 0;
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-14 w-14 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-500" />
+          <p className="text-lg font-semibold text-slate-700">Analyzing profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
@@ -30,30 +169,63 @@ function App() {
               <div className="text-sm uppercase tracking-[0.24em] text-slate-500">AI Instagram Business Profile Data</div>
               <h1 className="mt-3 text-3xl font-semibold text-slate-900">{activeTab}</h1>
             </div>
-           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-  <div className="flex flex-col gap-2">
-    <label className="text-sm font-medium text-slate-600">Mock profiles</label>
-    <select
-      value={selectedProfile}
-      onChange={(e) => setSelectedProfile(e.target.value)}
-      className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
-    >
-      {mockProfiles.map((item) => (
-        <option key={item.username} value={item.username}>
-          {item.displayName}
-        </option>
-      ))}
-    </select>
-  </div>
-  <div className="flex flex-col gap-2">
-    <label className="text-sm font-medium text-slate-600">Or enter Instagram URL</label>
-    <input
-      type="text"
-      placeholder="e.g., @username or instagram.com/username"
-      className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
-    />
-  </div>
-</div>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-slate-600">Mock profiles</label>
+                <select
+                  value={selectedProfile}
+                  onChange={(e) => {
+                    setSelectedProfile(e.target.value);
+                    setError('');
+                  }}
+                  className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
+                >
+                  <option value={NONE_PROFILE}>None</option>
+                  {mockProfiles.map((item) => (
+                    <option key={item.username} value={item.username}>
+                      {item.displayName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm font-medium text-slate-600">Or enter Instagram URL / username</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={usernameInput}
+                    onChange={(e) => {
+                      setUsernameInput(e.target.value);
+                      if (error) setError('');
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && showEnterButton) {
+                        runApiAnalysis(usernameInput);
+                      }
+                    }}
+                    placeholder="e.g., @username or instagram.com/username"
+                    className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
+                  />
+                  {showEnterButton && (
+                    <button
+                      onClick={() => runApiAnalysis(usernameInput)}
+                      className="rounded-2xl bg-emerald-500 px-4 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-600"
+                    >
+                      Enter
+                    </button>
+                  )}
+                </div>
+                {error && <p className="text-sm font-medium text-red-600">No account found</p>}
+              </div>
+
+              <button
+                onClick={handleAnalyze}
+                className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+              >
+                Analyze
+              </button>
+            </div>
           </div>
 
           <div className="mb-6 grid gap-3 sm:grid-cols-3">
