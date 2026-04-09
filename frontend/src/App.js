@@ -47,6 +47,18 @@ const extractUsername = (input) => {
   return cleaned.toLowerCase();
 };
 
+const buildInstagramUrl = (input) => {
+  const raw = String(input || '').trim();
+  if (!raw) return '';
+
+  if (/^https?:\/\//i.test(raw)) {
+    return raw;
+  }
+
+  const username = extractUsername(raw);
+  return username ? `https://www.instagram.com/${username}/` : '';
+};
+
 const mapApiToProfile = (apiData, baseProfile) => {
   const ai = apiData?.aiAnalysis || {};
   const growth = String(ai.growthPotential || '').toLowerCase();
@@ -67,6 +79,46 @@ const mapApiToProfile = (apiData, baseProfile) => {
     avg_comments: Number(apiData.avg_comments) || baseProfile.avg_comments,
     bio: apiData.bio || baseProfile.bio,
     tags: normalizeList(ai.tags || apiData.tags, baseProfile.tags),
+    businessCategory: ai.businessCategory || baseProfile.businessCategory,
+    businessType: ai.businessType || baseProfile.businessType,
+    audienceType: ai.audienceType || baseProfile.audienceType,
+    businessDescription: ai.description || baseProfile.businessDescription,
+    keyInsights: normalizeList(ai.keyInsights, baseProfile.keyInsights),
+    strengths: normalizeList(ai.strengths, baseProfile.strengths),
+    weaknesses: normalizeList(ai.weaknesses, baseProfile.weaknesses),
+    growthPotential: ai.growthPotential || baseProfile.growthPotential,
+    interestLevel,
+    recommendedAction: ai.recommendedAction || baseProfile.recommendedAction,
+    competitorInsights: ai.competitorInsights || baseProfile.competitorInsights,
+    contentStrategy: ai.contentStrategy || baseProfile.contentStrategy,
+    hashtagRecommendations: normalizeList(ai.hashtagRecommendations, baseProfile.hashtagRecommendations),
+    audienceBehavior: ai.audienceBehavior || baseProfile.audienceBehavior,
+    whyThisWorks: normalizeList(ai.whyThisWorks, baseProfile.whyThisWorks || []),
+  };
+};
+
+const mapScrapeToProfile = (scrapeData, baseProfile) => {
+  const profileData = scrapeData?.profile || {};
+  const metrics = scrapeData?.analysis || {};
+  const ai = scrapeData?.aiAnalysis || {};
+  const growth = String(ai.growthPotential || '').toLowerCase();
+  const interestLevel = growth.includes('high')
+    ? 'High'
+    : growth.includes('medium')
+      ? 'Medium'
+      : growth.includes('low')
+        ? 'Low'
+        : baseProfile.interestLevel;
+
+  return {
+    ...baseProfile,
+    username: profileData.username || baseProfile.username,
+    displayName: formatDisplayName(profileData.username || baseProfile.username) || baseProfile.displayName,
+    followers: Number(profileData.followers) || baseProfile.followers,
+    avg_likes: Number(metrics.avgLikes) || baseProfile.avg_likes,
+    avg_comments: Number(metrics.avgComments) || baseProfile.avg_comments,
+    bio: profileData.bio || baseProfile.bio,
+    tags: normalizeList(ai.tags || metrics.hashtags, baseProfile.tags),
     businessCategory: ai.businessCategory || baseProfile.businessCategory,
     businessType: ai.businessType || baseProfile.businessType,
     audienceType: ai.audienceType || baseProfile.audienceType,
@@ -107,7 +159,8 @@ function App() {
 
   const runApiAnalysis = async (rawValue) => {
     const username = extractUsername(rawValue);
-    if (!username) {
+    const url = buildInstagramUrl(rawValue);
+    if (!username || !url) {
       setError('No account found');
       return;
     }
@@ -116,18 +169,37 @@ function App() {
     setError('');
 
     try {
-      const response = await fetch(`http://localhost:5000/api/profiles/${username}`);
-      if (!response.ok) {
-        throw new Error('profile_not_found');
+      const scrapeResponse = await fetch('http://localhost:5000/api/scrape', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, resultsLimit: 30 }),
+      });
+
+      if (!scrapeResponse.ok) {
+        throw new Error('scrape_failed');
       }
 
-      const data = await response.json();
+      const scrapeData = await scrapeResponse.json();
       const matchedMock = mockProfiles.find((item) => item.username === username);
       const baseProfile = matchedMock || profile || mockProfiles[0];
-      setProfile(mapApiToProfile(data, baseProfile));
-      setSelectedProfile(matchedMock ? matchedMock.username : NONE_PROFILE);
-    } catch (fetchError) {
-      setError('No account found');
+
+      setProfile(mapScrapeToProfile(scrapeData, baseProfile));
+      setSelectedProfile(NONE_PROFILE);
+    } catch (scrapeError) {
+      try {
+        const response = await fetch(`http://localhost:5000/api/profiles/${username}`);
+        if (!response.ok) {
+          throw new Error('profile_not_found');
+        }
+
+        const data = await response.json();
+        const matchedMock = mockProfiles.find((item) => item.username === username);
+        const baseProfile = matchedMock || profile || mockProfiles[0];
+        setProfile(mapApiToProfile(data, baseProfile));
+        setSelectedProfile(matchedMock ? matchedMock.username : NONE_PROFILE);
+      } catch (fetchError) {
+        setError('No account found');
+      }
     } finally {
       setLoading(false);
     }

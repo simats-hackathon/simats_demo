@@ -92,10 +92,47 @@ A full-stack web app with:
 
 ## API Endpoints
 
-- `POST /api/scrape` - accepts `{ "url": "https://www.instagram.com/<profile>/" }` and returns profile details, posts, and analysis
+- `POST /api/scrape` - accepts `{ "url": "https://www.instagram.com/<profile>/" }` and returns profile details, posts, analytics, and AI insights in a single response
 - `GET /api/profiles/:username` - returns profile analysis, engagement metrics, tags, and Ollama AI analysis
 - `GET /api/profiles/compare/:username1/:username2` - returns two profile payloads and a comparison explanation
 - `GET /api/profiles/stats` - returns portfolio-level summary metrics from the mock dataset
+
+## End-to-End Analyze Flow
+
+1. Frontend sends user input (URL or username) to `POST /api/scrape`.
+2. Backend calls Apify Instagram Scraper to fetch latest public posts.
+3. Backend computes metrics (average likes/comments, hashtags, posting frequency, engagement rate).
+4. Backend sends profile summary to Ollama for business intelligence insights.
+5. Frontend receives one unified payload with `profile`, `posts`, `analysis`, and `aiAnalysis`.
+
+Example scrape response shape:
+
+```json
+{
+   "success": true,
+   "profile": {
+      "username": "example_user",
+      "followers": 12345,
+      "bio": "..."
+   },
+   "posts": [],
+   "analysis": {
+      "avgLikes": 0,
+      "avgComments": 0,
+      "hashtags": [],
+      "postingFrequency": 0,
+      "engagementRate": 0
+   },
+   "aiAnalysis": {
+      "businessCategory": "...",
+      "recommendedAction": "..."
+   },
+   "meta": {
+      "totalPosts": 0,
+      "source": "Apify Instagram Scraper"
+   }
+}
+```
 
 ## How AI Works
 

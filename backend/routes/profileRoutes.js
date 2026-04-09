@@ -4,7 +4,7 @@ const { getProfileAnalysis, compareProfiles, getPortfolioStats } = require('../c
 const router = express.Router();
 
 router.get('/stats', getPortfolioStats);
-router.get('/:username', getProfileAnalysis);
 router.get('/compare/:username1/:username2', compareProfiles);
+router.get('/:username', getProfileAnalysis);
 
 module.exports = router;

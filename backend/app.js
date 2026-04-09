@@ -5,6 +5,7 @@ require('dotenv').config();
 const profileRoutes = require('./routes/profileRoutes');
 const { runApify } = require('./services/apifyService');
 const { analyzeData } = require('./services/analysisService');
+const { getAIInsights } = require('./services/aiService');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -68,15 +69,26 @@ app.post("/api/scrape", async (req, res) => {
     const profile = buildProfileDetails(posts, url);
     const followers = profile.followers || 0;
 
-    // Step 3: Analyze data
+    // Step 3: Analyze metrics from scraped posts
     const analysis = analyzeData(posts, followers);
 
-    // Step 4: Send final response
+    // Step 4: Enrich with AI business insights
+    const aiInput = {
+      username: profile.username || null,
+      followers,
+      engagementRate: analysis.engagementRate,
+      bio: profile.bio || '',
+      tags: analysis.hashtags || [],
+    };
+    const aiAnalysis = await getAIInsights(aiInput);
+
+    // Step 5: Send unified response
     return res.json({
       success: true,
       profile,
       posts,
       analysis,
+      aiAnalysis,
       meta: {
         totalPosts: posts.length,
         source: 'Apify Instagram Scraper',
@@ -97,6 +109,17 @@ app.post("/api/scrape", async (req, res) => {
       ...(error.details ? { details: error.details } : {}),
     });
   }
+});
+
+app.use((error, req, res, next) => {
+  if (error && error instanceof SyntaxError && error.status === 400 && 'body' in error) {
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid JSON body',
+    });
+  }
+
+  return next(error);
 });
 
 // start server
