@@ -94,6 +94,7 @@ const mapApiToProfile = (apiData, baseProfile) => {
     hashtagRecommendations: normalizeList(ai.hashtagRecommendations, baseProfile.hashtagRecommendations),
     audienceBehavior: ai.audienceBehavior || baseProfile.audienceBehavior,
     whyThisWorks: normalizeList(ai.whyThisWorks, baseProfile.whyThisWorks || []),
+    fetchedDetails: null,
   };
 };
 
@@ -134,6 +135,17 @@ const mapScrapeToProfile = (scrapeData, baseProfile) => {
     hashtagRecommendations: normalizeList(ai.hashtagRecommendations, baseProfile.hashtagRecommendations),
     audienceBehavior: ai.audienceBehavior || baseProfile.audienceBehavior,
     whyThisWorks: normalizeList(ai.whyThisWorks, baseProfile.whyThisWorks || []),
+    fetchedDetails: {
+      source: scrapeData?.meta?.source || 'Apify Instagram Scraper',
+      inputUrl: profileData?.sourceUrl || '',
+      fetchedUsername: profileData?.username || '',
+      postsFetched: Array.isArray(scrapeData?.posts) ? scrapeData.posts.length : 0,
+      followersFromScrape: Number(profileData?.followers) || 0,
+      avgLikes: Number(metrics?.avgLikes) || 0,
+      avgComments: Number(metrics?.avgComments) || 0,
+      engagementRate: Number(metrics?.engagementRate) || 0,
+      fetchedAt: new Date().toISOString(),
+    },
   };
 };
 
