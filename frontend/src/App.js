@@ -31,19 +31,40 @@ const extractUsername = (input) => {
   const raw = String(input || '').trim();
   if (!raw) return '';
 
+  if (raw.includes('instagram.com') && !/^https?:\/\//i.test(raw)) {
+    const normalized = raw.startsWith('www.') ? `https://${raw}` : `https://www.${raw}`;
+    return extractUsername(normalized);
+  }
+
   if (/^https?:\/\//i.test(raw)) {
     try {
       const parsed = new URL(raw);
+      const hostname = parsed.hostname.replace(/^www\./, '').toLowerCase();
+      if (hostname !== 'instagram.com') {
+        return '';
+      }
+
       const parts = parsed.pathname.split('/').filter(Boolean);
       if (parts.length > 0) {
-        return parts[0].replace(/^@+/, '').toLowerCase();
+        const candidate = parts[0].replace(/^@+/, '').toLowerCase();
+        const reserved = new Set(['p', 'reel', 'reels', 'tv', 'stories', 'explore']);
+        return reserved.has(candidate) ? '' : candidate;
       }
+
+      return '';
     } catch (error) {
       return '';
     }
   }
 
+  if (raw.includes('/')) {
+    return '';
+  }
+
   const cleaned = raw.replace(/^@+/, '').split('/')[0].trim();
+  if (/^https?:/i.test(cleaned) || cleaned.includes('.')) {
+    return '';
+  }
   return cleaned.toLowerCase();
 };
 
@@ -172,8 +193,8 @@ function App() {
   const runApiAnalysis = async (rawValue) => {
     const username = extractUsername(rawValue);
     const url = buildInstagramUrl(rawValue);
-    if (!username || !url) {
-      setError('No account found');
+    if (!username || !url || username === 'instagram.com') {
+      setError('Enter a valid username');
       return;
     }
 
@@ -201,7 +222,11 @@ function App() {
       try {
         const response = await fetch(`http://localhost:5000/api/profiles/${username}`);
         if (!response.ok) {
-          throw new Error('profile_not_found');
+          if (response.status === 404) {
+            setError('No account found');
+            return;
+          }
+          throw new Error('profile_fetch_failed');
         }
 
         const data = await response.json();
@@ -210,7 +235,7 @@ function App() {
         setProfile(mapApiToProfile(data, baseProfile));
         setSelectedProfile(matchedMock ? matchedMock.username : NONE_PROFILE);
       } catch (fetchError) {
-        setError('No account found');
+        setError('Something went wrong');
       }
     } finally {
       setLoading(false);
@@ -281,7 +306,7 @@ function App() {
                     value={usernameInput}
                     onChange={(e) => {
                       setUsernameInput(e.target.value);
-                      if (error) setError('');
+                      setError('');
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' && showEnterButton) {
@@ -300,7 +325,7 @@ function App() {
                     </button>
                   )}
                 </div>
-                {error && <p className="text-sm font-medium text-red-600">No account found</p>}
+                {error && <p className="text-sm font-medium text-red-600">{error}</p>}
               </div>
 
               <button

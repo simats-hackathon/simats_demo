@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const statCards = [
   { label: 'Lead Source', value: 'Web Form' },
@@ -6,6 +6,8 @@ const statCards = [
 ];
 
 const Overview = ({ profile }) => {
+  const [showFetchedDetails, setShowFetchedDetails] = useState(true);
+
   return (
     <div className="space-y-8">
       <div className="grid gap-4 xl:grid-cols-[1.9fr_1fr]">
@@ -61,18 +63,30 @@ const Overview = ({ profile }) => {
 
       {profile.fetchedDetails && (
         <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="mb-5 text-sm uppercase tracking-[0.24em] text-slate-400">Fetched Details</div>
-          <div className="grid gap-4 text-slate-700 sm:grid-cols-2 lg:grid-cols-3">
-            <p><span className="font-semibold text-slate-900">Source:</span> {profile.fetchedDetails.source}</p>
-            <p><span className="font-semibold text-slate-900">Fetched Username:</span> {profile.fetchedDetails.fetchedUsername || 'N/A'}</p>
-            <p><span className="font-semibold text-slate-900">Posts Fetched:</span> {profile.fetchedDetails.postsFetched}</p>
-            <p><span className="font-semibold text-slate-900">Followers:</span> {profile.fetchedDetails.followersFromScrape.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">Avg Likes:</span> {profile.fetchedDetails.avgLikes.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">Avg Comments:</span> {profile.fetchedDetails.avgComments.toLocaleString()}</p>
-            <p><span className="font-semibold text-slate-900">Engagement Rate:</span> {profile.fetchedDetails.engagementRate}%</p>
-            <p className="sm:col-span-2 lg:col-span-3 break-all"><span className="font-semibold text-slate-900">Input URL:</span> {profile.fetchedDetails.inputUrl || 'N/A'}</p>
-            <p className="sm:col-span-2 lg:col-span-3"><span className="font-semibold text-slate-900">Fetched At:</span> {new Date(profile.fetchedDetails.fetchedAt).toLocaleString()}</p>
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <div className="text-sm uppercase tracking-[0.24em] text-slate-400">Fetched Details</div>
+            <button
+              type="button"
+              onClick={() => setShowFetchedDetails((prev) => !prev)}
+              className="rounded-2xl border border-slate-300 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-600 transition hover:border-slate-500 hover:text-slate-900"
+            >
+              {showFetchedDetails ? 'Hide Details' : 'Show Details'}
+            </button>
           </div>
+
+          {showFetchedDetails && (
+            <div className="grid gap-4 text-slate-700 sm:grid-cols-2 lg:grid-cols-3">
+              <p><span className="font-semibold text-slate-900">Source:</span> {profile.fetchedDetails.source}</p>
+              <p><span className="font-semibold text-slate-900">Fetched Username:</span> {profile.fetchedDetails.fetchedUsername || 'N/A'}</p>
+              <p><span className="font-semibold text-slate-900">Posts Fetched:</span> {profile.fetchedDetails.postsFetched}</p>
+              <p><span className="font-semibold text-slate-900">Followers:</span> {profile.fetchedDetails.followersFromScrape.toLocaleString()}</p>
+              <p><span className="font-semibold text-slate-900">Avg Likes:</span> {profile.fetchedDetails.avgLikes.toLocaleString()}</p>
+              <p><span className="font-semibold text-slate-900">Avg Comments:</span> {profile.fetchedDetails.avgComments.toLocaleString()}</p>
+              <p><span className="font-semibold text-slate-900">Engagement Rate:</span> {profile.fetchedDetails.engagementRate}%</p>
+              <p className="sm:col-span-2 lg:col-span-3 break-all"><span className="font-semibold text-slate-900">Input URL:</span> {profile.fetchedDetails.inputUrl || 'N/A'}</p>
+              <p className="sm:col-span-2 lg:col-span-3"><span className="font-semibold text-slate-900">Fetched At:</span> {new Date(profile.fetchedDetails.fetchedAt).toLocaleString()}</p>
+            </div>
+          )}
         </div>
       )}
 
