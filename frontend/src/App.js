@@ -5,10 +5,11 @@ import Analytics from './pages/Analytics';
 import AIInsights from './pages/AIInsights';
 import Compare from './pages/Compare';
 import Report from './pages/Report';
+import FetchedDetails from './pages/FetchedDetails';
 import mockProfiles from './data/mockProfiles';
 import './index.css';
 
-const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report'];
+const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report', 'Fetched Details'];
 const NONE_PROFILE = '__none__';
 
 const normalizeList = (value, fallback) => {
@@ -359,6 +360,7 @@ function App() {
             {activeTab === 'AI Insights' && <AIInsights profile={profile} />}
             {activeTab === 'Compare' && <Compare profiles={mockProfiles} />}
             {activeTab === 'Report' && <Report profile={profile} />}
+            {activeTab === 'Fetched Details' && <FetchedDetails profile={profile} />}
           </div>
         </main>
       </div>

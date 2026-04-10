@@ -1,6 +1,6 @@
 import React from 'react';
 
-const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report'];
+const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report', 'Fetched Details'];
 
 const Sidebar = ({ activeTab, setActiveTab, profile }) => {
   return (
