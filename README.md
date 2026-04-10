@@ -35,6 +35,20 @@ A full-stack web app with:
 - **AI**: Ollama (`mistral` by default)
 - **Data**: Mock JSON dataset plus scraped Instagram post data
 
+## Data Source
+
+This project uses a structured mock dataset (`profiles.json`) to simulate Instagram profile data.
+
+Due to API and scraping limitations, a controlled dataset approach is used.
+
+The system architecture is designed to be modular:
+
+- The data layer can be replaced with real APIs or scrapers in production.
+- The current dataset enables stable AI analysis and demo reliability.
+
+Pipeline:
+User Input -> Data Service -> Analysis Service -> AI (Ollama) -> Dashboard
+
 ## Installation
 
 ### Prerequisites

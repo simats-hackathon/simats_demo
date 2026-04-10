@@ -1,266 +1,80 @@
 [
   {
-    "username": "fitness_guru_john",
-    "followers": 50000,
-    "avg_likes": 1200,
-    "avg_comments": 150,
-    "bio": "Certified personal trainer | Fitness enthusiast | Helping you achieve your goals #fitness #health",
-    "posts": [
-      {"caption": "Morning workout routine! 💪", "likes": 1300},
-      {"caption": "Healthy meal prep for the week", "likes": 1100},
-      {"caption": "Beach body tips", "likes": 1250}
-    ]
+    "username": "beauty_brand_ella",
+    "displayName": "Ella Beauty",
+    "followers": 82000,
+    "avg_likes": 4200,
+    "avg_comments": 320,
+    "bio": "Premium skincare routines, cruelty-free beauty, and self-care tips for modern women.",
+    "businessCategory": "B2C – Beauty Brand",
+    "businessType": "B2C",
+    "audienceType": "Professionals",
+    "interestLevel": "High",
+    "tags": ["#skincare", "#beauty", "#wellness", "#selfcare"],
+    "recommendedAction": "Launch a branded skincare campaign focused on evenings and product tutorials.",
+    "businessDescription": "Ella Beauty is a premium skincare brand that engages an upscale, wellness-minded audience with polished tutorials and product education.",
+    "keyInsights": [
+      "High engagement from tutorial reels and product tips.",
+      "Audience responds well to polished before-and-after content.",
+      "Strong brand voice in wellness and self-care."
+    ],
+    "strengths": ["Polished visual identity", "Consistent skincare education", "Strong comment engagement"],
+    "weaknesses": ["Low user-generated content", "Limited posting frequency"],
+    "competitorInsights": "Competitors using live skincare demos and exclusive offers outperform in engagement by emphasizing authenticity and urgency.",
+    "contentStrategy": "Focus on 3 tutorial reels per week, quick routine stories, and monthly product launch teasers.",
+    "hashtagRecommendations": ["#GlowUp", "#CleanBeauty", "#SkinConfidence", "#BeautyRoutine"],
+    "audienceBehavior": "Audience is active after work hours and prefers short, actionable reels that show real benefits."
   },
   {
-    "username": "fashionista_sarah",
-    "followers": 75000,
-    "avg_likes": 2500,
-    "avg_comments": 300,
-    "bio": "Fashion designer | Style inspiration | Trendsetter #fashion #style #ootd",
-    "posts": [
-      {"caption": "New collection drop! 👗", "likes": 2800},
-      {"caption": "Street style vibes", "likes": 2200},
-      {"caption": "Behind the scenes", "likes": 2600}
-    ]
-  },
-  {
-    "username": "tech_startup_alex",
-    "followers": 25000,
-    "avg_likes": 800,
-    "avg_comments": 100,
-    "bio": "Founder of TechInnovate | Building the future | SaaS solutions #tech #startup #innovation",
-    "posts": [
-      {"caption": "Product launch announcement!", "likes": 900},
-      {"caption": "Team building day", "likes": 700},
-      {"caption": "Industry insights", "likes": 850}
-    ]
-  },
-  {
-    "username": "foodie_maria",
-    "followers": 100000,
-    "avg_likes": 3500,
-    "avg_comments": 400,
-    "bio": "Chef | Food blogger | Recipe creator | Delicious eats #food #cooking #recipes",
-    "posts": [
-      {"caption": "Homemade pasta recipe", "likes": 3800},
-      {"caption": "Restaurant review", "likes": 3200},
-      {"caption": "Baking tips", "likes": 3600}
-    ]
-  },
-  {
-    "username": "travel_adventurer_mike",
-    "followers": 60000,
-    "avg_likes": 1800,
-    "avg_comments": 200,
-    "bio": "Travel photographer | Adventure seeker | Exploring the world #travel #photography #adventure",
-    "posts": [
-      {"caption": "Sunset in Bali", "likes": 2000},
-      {"caption": "Hiking in the mountains", "likes": 1600},
-      {"caption": "Cultural experiences", "likes": 1900}
-    ]
-  },
-  {
-    "username": "beauty_expert_lisa",
-    "followers": 80000,
-    "avg_likes": 2200,
-    "avg_comments": 250,
-    "bio": "Beauty influencer | Skincare tips | Makeup tutorials #beauty #skincare #makeup",
-    "posts": [
-      {"caption": "Skincare routine for glowing skin", "likes": 2400},
-      {"caption": "New makeup look", "likes": 2000},
-      {"caption": "Product reviews", "likes": 2300}
-    ]
-  },
-  {
-    "username": "artist_david",
-    "followers": 30000,
-    "avg_likes": 600,
-    "avg_comments": 80,
-    "bio": "Digital artist | Illustrator | Creative mind #art #illustration #digitalart",
-    "posts": [
-      {"caption": "New artwork reveal", "likes": 650},
-      {"caption": "Process video", "likes": 550},
-      {"caption": "Fan art collaboration", "likes": 700}
-    ]
-  },
-  {
-    "username": "finance_coach_nina",
-    "followers": 42000,
-    "avg_likes": 1400,
-    "avg_comments": 190,
-    "bio": "Personal finance coach | Budgeting and investing tips #finance #investing #moneymindset",
-    "posts": [
-      {"caption": "50-30-20 budgeting method", "likes": 1500},
-      {"caption": "Beginner ETF guide", "likes": 1320},
-      {"caption": "Debt payoff strategy", "likes": 1410}
-    ]
-  },
-  {
-    "username": "homechef_aaron",
+    "username": "fitness_trend_sam",
+    "displayName": "Fitness Trend Sam",
     "followers": 54000,
-    "avg_likes": 2100,
-    "avg_comments": 230,
-    "bio": "Home cook | Quick recipes for busy people #food #homecooking #mealprep",
-    "posts": [
-      {"caption": "15-minute protein bowl", "likes": 2200},
-      {"caption": "One-pot pasta night", "likes": 1980},
-      {"caption": "Meal prep for weekdays", "likes": 2150}
-    ]
-  },
-  {
-    "username": "devmentor_kiran",
-    "followers": 38000,
-    "avg_likes": 1050,
-    "avg_comments": 170,
-    "bio": "Software mentor | Web dev tutorials and career tips #coding #webdev #careergrowth",
-    "posts": [
-      {"caption": "How to structure React apps", "likes": 1100},
-      {"caption": "API design fundamentals", "likes": 980},
-      {"caption": "Interview prep checklist", "likes": 1080}
-    ]
-  },
-  {
-    "username": "eco_living_ria",
-    "followers": 47000,
-    "avg_likes": 1650,
+    "avg_likes": 2900,
     "avg_comments": 210,
-    "bio": "Sustainable lifestyle creator | Eco-friendly swaps #sustainability #ecoliving #zerowaste",
-    "posts": [
-      {"caption": "Plastic-free kitchen essentials", "likes": 1720},
-      {"caption": "Low-waste shopping routine", "likes": 1580},
-      {"caption": "Green home audit", "likes": 1690}
-    ]
+    "bio": "At-home workout plans, nutrition hacks, and motivation for busy professionals.",
+    "businessCategory": "B2C – Fitness Coach",
+    "businessType": "B2C",
+    "audienceType": "Professionals",
+    "interestLevel": "Medium",
+    "tags": ["#fitness", "#workout", "#nutrition", "#wellness"],
+    "recommendedAction": "Build a 4-week transformation series and offer an onboarding challenge.",
+    "businessDescription": "Fitness Trend Sam is a fitness coach brand that inspires busy professionals with efficient workouts and nutrition guidance.",
+    "keyInsights": [
+      "Strong follow-through on motivational posts.",
+      "Reels with quick workouts perform best.",
+      "Nutrition tips generate meaningful saves."
+    ],
+    "strengths": ["Clear fitness positioning", "Actionable daily tips", "Good save rate"],
+    "weaknesses": ["Uneven posting cadence", "Limited audience segmentation"],
+    "competitorInsights": "Top competitor content focuses on community challenges and daily accountability, resulting in higher story interactions.",
+    "contentStrategy": "Publish 2 training reels, 1 nutrition tip, and 1 client testimonial each week.",
+    "hashtagRecommendations": ["#FitLife", "#BusyProfessionals", "#WorkoutAtHome", "#NutritionHacks"],
+    "audienceBehavior": "Audience engages most before and after the workday and values short, results-driven content."
   },
   {
-    "username": "photowalk_jules",
-    "followers": 91000,
-    "avg_likes": 3200,
-    "avg_comments": 280,
-    "bio": "Street and travel photographer | Visual storytelling #photography #streetphoto #creator",
-    "posts": [
-      {"caption": "Golden hour city frames", "likes": 3350},
-      {"caption": "Monochrome portrait series", "likes": 3050},
-      {"caption": "Weekend photo walk tips", "likes": 3240}
-    ]
-  },
-  {
-    "username": "momfit_priya",
-    "followers": 26000,
-    "avg_likes": 950,
-    "avg_comments": 140,
-    "bio": "Postpartum wellness coach | Fitness for moms #momfitness #wellness #healthyhabits",
-    "posts": [
-      {"caption": "10-minute home workout", "likes": 980},
-      {"caption": "Core recovery basics", "likes": 920},
-      {"caption": "Weekly wellness planner", "likes": 960}
-    ]
-  },
-  {
-    "username": "luxury_realtor_ian",
-    "followers": 120000,
-    "avg_likes": 2800,
-    "avg_comments": 260,
-    "bio": "Luxury real estate advisor | Market insights and tours #realestate #luxuryhomes #property",
-    "posts": [
-      {"caption": "Penthouse walkthrough", "likes": 2950},
-      {"caption": "Market update this week", "likes": 2660},
-      {"caption": "First-time investor tips", "likes": 2840}
-    ]
-  },
-  {
-    "username": "gadget_lab_zoe",
-    "followers": 68000,
-    "avg_likes": 2400,
-    "avg_comments": 310,
-    "bio": "Tech reviewer | Smartphones, wearables and productivity tools #techreview #gadgets #productivity",
-    "posts": [
-      {"caption": "Top budget phones 2026", "likes": 2520},
-      {"caption": "Wearable battery test", "likes": 2320},
-      {"caption": "Desk setup upgrades", "likes": 2460}
-    ]
-  },
-  {
-    "username": "yoga_with_sana",
-    "followers": 36000,
-    "avg_likes": 1500,
-    "avg_comments": 220,
-    "bio": "Yoga instructor | Mindful routines for daily life #yoga #mindfulness #wellbeing",
-    "posts": [
-      {"caption": "Morning mobility flow", "likes": 1580},
-      {"caption": "Breathing for stress relief", "likes": 1430},
-      {"caption": "Desk worker yoga set", "likes": 1490}
-    ]
-  },
-  {
-    "username": "brand_story_maya",
-    "followers": 29000,
-    "avg_likes": 870,
-    "avg_comments": 130,
-    "bio": "Brand strategist | Storytelling and content positioning #branding #marketing #contentstrategy",
-    "posts": [
-      {"caption": "Messaging framework in 3 steps", "likes": 910},
-      {"caption": "Audience persona mistakes", "likes": 830},
-      {"caption": "Offer positioning examples", "likes": 880}
-    ]
-  },
-  {
-    "username": "petcare_doc_liam",
-    "followers": 51000,
-    "avg_likes": 1750,
-    "avg_comments": 240,
-    "bio": "Veterinary educator | Practical pet care tips #petcare #dogs #cats",
-    "posts": [
-      {"caption": "Nutrition myths for pets", "likes": 1810},
-      {"caption": "Vaccination schedule explained", "likes": 1690},
-      {"caption": "Home grooming checklist", "likes": 1760}
-    ]
-  },
-  {
-    "username": "startup_ops_ren",
-    "followers": 22000,
-    "avg_likes": 760,
-    "avg_comments": 95,
-    "bio": "Startup operations advisor | Systems, hiring and growth #startup #operations #leadership",
-    "posts": [
-      {"caption": "Weekly ops dashboard template", "likes": 790},
-      {"caption": "Hiring scorecard guide", "likes": 730},
-      {"caption": "Process map for small teams", "likes": 770}
-    ]
-  },
-  {
-    "username": "dancecoach_elena",
-    "followers": 74000,
-    "avg_likes": 3000,
-    "avg_comments": 340,
-    "bio": "Dance coach | Tutorials and choreography breakdowns #dance #reels #creator",
-    "posts": [
-      {"caption": "30-second combo tutorial", "likes": 3150},
-      {"caption": "Beginner footwork drills", "likes": 2870},
-      {"caption": "Performance behind the scenes", "likes": 3020}
-    ]
-  },
-  {
-    "username": "edu_science_omar",
+    "username": "travel_story_nina",
+    "displayName": "Travel Story Nina",
     "followers": 64000,
-    "avg_likes": 2100,
+    "avg_likes": 3100,
     "avg_comments": 260,
-    "bio": "Science educator | Simplifying complex concepts #science #education #learning",
-    "posts": [
-      {"caption": "Why skies change color", "likes": 2190},
-      {"caption": "Physics in daily life", "likes": 2030},
-      {"caption": "Study methods that work", "likes": 2120}
-    ]
-  },
-  {
-    "username": "minimal_design_kai",
-    "followers": 33000,
-    "avg_likes": 1180,
-    "avg_comments": 145,
-    "bio": "UI and visual design creator | Minimal systems and clean layouts #uidesign #branding #creativity",
-    "posts": [
-      {"caption": "Landing page teardown", "likes": 1230},
-      {"caption": "Typography pairings", "likes": 1110},
-      {"caption": "Design system checklist", "likes": 1190}
-    ]
+    "bio": "Adventure travel guides, destination storytelling, and creative travel planning.",
+    "businessCategory": "B2C – Travel Creator",
+    "businessType": "B2C",
+    "audienceType": "Students",
+    "interestLevel": "Medium",
+    "tags": ["#travel", "#adventure", "#storytelling", "#explore"],
+    "recommendedAction": "Position around weekend escapes and collaboration posts with gear brands.",
+    "businessDescription": "Travel Story Nina uses narrative travel content and destination advice to connect with young adventure seekers.",
+    "keyInsights": [
+      "Location-based posts drive the most saves.",
+      "Behind-the-scenes content boosts audience trust.",
+      "Story polls increase remarketing opportunities."
+    ],
+    "strengths": ["Strong storytelling", "High save potential", "Visual destination content"],
+    "weaknesses": ["Lower comment depth", "Inconsistent posting theme"],
+    "competitorInsights": "Competitors that blend travel planning with packing tips see better sustained engagement.",
+    "contentStrategy": "Use destination reels, packing guides, and weekend inspiration twice a week.",
+    "hashtagRecommendations": ["#WeekendEscape", "#TravelPlanning", "#StoryDrivenTravel", "#TravelInspo"],
+    "audienceBehavior": "Students and young travelers engage in the late afternoon and weekend planning sessions."
   }
 ]

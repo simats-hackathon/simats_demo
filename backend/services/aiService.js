@@ -51,24 +51,49 @@ const escapeJsonString = (value) =>
 
 const buildPrompt = (profile) => {
   const tags = Array.isArray(profile.tags) ? profile.tags : [];
-  return `You are a business intelligence AI.
+  return `You are a business intelligence AI for Instagram lead analysis.
 
-Analyze an Instagram profile and return ONLY valid JSON.
+Return STRICT JSON only. No markdown. No explanations. No extra keys.
 
-IMPORTANT:
-- The output MUST be wrapped inside an "aiAnalysis" object.
-- Do NOT return anything outside JSON.
-- Do NOT include markdown or explanations.
+Task:
+Analyze this profile with strong context awareness and produce one "aiAnalysis" object.
+
+Primary signals:
+- username
+- bio
+
+Secondary signals:
+- hashtags
+
+Classification constraints:
+- businessCategory must be exactly one of: Fitness, Fashion, Food, Travel, Technology, Beauty, Finance, Art, General
+- Do not randomly guess. Use General only when signals are truly unclear.
+- Well-known mapping examples: Nike/Adidas => Fitness, NatGeo => Travel.
+- businessType must be B2B or B2C.
+
+Interest level rule from engagementRate:
+- > 5 => High
+- 2 to 5 => Medium
+- < 2 => Low
+Use this rule to set growthPotential as High/Medium/Low.
+
+Quality constraints:
+- contentStrategy must be specific to predicted category and include what to post, frequency, and best posting time.
+- hashtagRecommendations must be niche-relevant and avoid generic tags like #growth or #brand.
+- recommendedAction must be specific, realistic, and directly actionable.
+- Keep all text concise and business-oriented.
+- Arrays must contain 2 to 4 items.
 
 Input:
 ${JSON.stringify({
+  username: profile.username,
   followers: profile.followers,
   engagementRate: profile.engagementRate,
   bio: escapeJsonString(profile.bio),
   tags,
 }, null, 2)}
 
-Output JSON:
+Required output format:
 {
   "aiAnalysis": {
     "businessCategory": "",
@@ -89,15 +114,8 @@ Output JSON:
   }
 }
 
-Rules:
-- Return ONLY JSON (no extra text).
-- Keep values short, clear, and actionable.
-- Arrays must have 2-4 items only.
-- Base analysis on engagement + bio + tags.
-- Focus on business insights, marketing strategy, and growth.
-
-Fallback Rule:
-If analysis is not possible, return exactly:
+Fallback rule:
+If analysis is impossible from input, return exactly this JSON:
 {
   "aiAnalysis": {
     "businessCategory": "Unknown",
@@ -206,8 +224,10 @@ const getAIInsights = async (profile) => {
   try {
     console.log(`[Ollama] Starting analysis for profile: ${profile.username}`);
     const prompt = buildPrompt(profile);
+    console.log('🧠 PROMPT SENT TO AI:\n', prompt);
     console.log(`[Ollama] Sending request to ${OLLAMA_MODEL} via ${OLLAMA_API_URL}`);
     const rawText = await callOllama(prompt);
+    console.log('🤖 RAW AI RESPONSE:\n', rawText);
     
     if (!rawText || typeof rawText !== 'string') {
       console.error('[Ollama] Empty response from model');
@@ -229,6 +249,8 @@ const getAIInsights = async (profile) => {
       console.warn('[Ollama] Response missing required BI fields. Got:', keys);
       return safeDefault;
     }
+
+    console.log('✅ FINAL AI OUTPUT:\n', resolved);
 
     console.log('[Ollama] Analysis complete for', profile.username);
     return resolved;

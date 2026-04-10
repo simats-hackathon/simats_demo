@@ -1,0 +1,182 @@
+{
+  "fitforge_anu": {
+    "username": "fitforge_anu",
+    "followers": 18000,
+    "bio": "Strength coach helping busy professionals build muscle at home with short progressive workouts.",
+    "category": "Fitness",
+    "businessType": "B2C",
+    "hashtags": ["#homeworkoutplan", "#strengthforwomen", "#progressiveoverload", "#dumbbelltraining"],
+    "posts": [
+      { "likes": 1420, "comments": 44, "type": "reel", "time": "evening" },
+      { "likes": 1310, "comments": 39, "type": "carousel", "time": "morning" },
+      { "likes": 1180, "comments": 34, "type": "image", "time": "afternoon" },
+      { "likes": 1560, "comments": 53, "type": "reel", "time": "night" },
+      { "likes": 1240, "comments": 36, "type": "carousel", "time": "evening" },
+      { "likes": 1110, "comments": 31, "type": "image", "time": "morning" },
+      { "likes": 1490, "comments": 49, "type": "reel", "time": "evening" },
+      { "likes": 1270, "comments": 37, "type": "carousel", "time": "night" }
+    ]
+  },
+  "vogueatelier_nia": {
+    "username": "vogueatelier_nia",
+    "followers": 75000,
+    "bio": "Sustainable womenswear label sharing capsule styling guides and limited handcrafted drops.",
+    "category": "Fashion",
+    "businessType": "B2C",
+    "hashtags": ["#capsulewardrobeindia", "#slowfashionlabel", "#ethicalstreetstyle", "#linenedit"],
+    "posts": [
+      { "likes": 3650, "comments": 112, "type": "reel", "time": "evening" },
+      { "likes": 3280, "comments": 96, "type": "carousel", "time": "afternoon" },
+      { "likes": 2950, "comments": 84, "type": "image", "time": "morning" },
+      { "likes": 3890, "comments": 124, "type": "reel", "time": "night" },
+      { "likes": 3340, "comments": 101, "type": "carousel", "time": "evening" },
+      { "likes": 3010, "comments": 89, "type": "image", "time": "afternoon" },
+      { "likes": 4020, "comments": 129, "type": "reel", "time": "night" },
+      { "likes": 3410, "comments": 104, "type": "carousel", "time": "morning" }
+    ]
+  },
+  "tiffintrail_kitchen": {
+    "username": "tiffintrail_kitchen",
+    "followers": 12000,
+    "bio": "Local cloud kitchen posting high-protein Indian lunchbox ideas for office workers and students.",
+    "category": "Food",
+    "businessType": "B2C",
+    "hashtags": ["#highproteintiffin", "#indianmealprep", "#officeboxrecipes", "#quickhomelunch"],
+    "posts": [
+      { "likes": 980, "comments": 31, "type": "reel", "time": "morning" },
+      { "likes": 860, "comments": 24, "type": "carousel", "time": "evening" },
+      { "likes": 770, "comments": 21, "type": "image", "time": "afternoon" },
+      { "likes": 1030, "comments": 35, "type": "reel", "time": "night" },
+      { "likes": 900, "comments": 27, "type": "carousel", "time": "morning" },
+      { "likes": 740, "comments": 20, "type": "image", "time": "afternoon" },
+      { "likes": 1060, "comments": 36, "type": "reel", "time": "evening" },
+      { "likes": 880, "comments": 25, "type": "carousel", "time": "night" }
+    ]
+  },
+  "roamledger_travel": {
+    "username": "roamledger_travel",
+    "followers": 210000,
+    "bio": "Budget travel creator mapping visa-friendly itineraries and practical backpacking routes.",
+    "category": "Travel",
+    "businessType": "B2C",
+    "hashtags": ["#budgetitinerary", "#backpackingroutes", "#solotravelguide", "#visaonarrivaltips"],
+    "posts": [
+      { "likes": 5200, "comments": 158, "type": "reel", "time": "evening" },
+      { "likes": 4680, "comments": 136, "type": "carousel", "time": "morning" },
+      { "likes": 4320, "comments": 126, "type": "image", "time": "afternoon" },
+      { "likes": 5480, "comments": 171, "type": "reel", "time": "night" },
+      { "likes": 4890, "comments": 147, "type": "carousel", "time": "evening" },
+      { "likes": 4410, "comments": 131, "type": "image", "time": "afternoon" },
+      { "likes": 5710, "comments": 179, "type": "reel", "time": "night" },
+      { "likes": 5030, "comments": 151, "type": "carousel", "time": "morning" }
+    ]
+  },
+  "stackpilot_saas": {
+    "username": "stackpilot_saas",
+    "followers": 46000,
+    "bio": "SaaS startup automating CRM workflows for sales teams in B2B software companies.",
+    "category": "Technology",
+    "businessType": "B2B",
+    "hashtags": ["#b2bsalesautomation", "#crmworkflow", "#saasops", "#pipelineforecasting"],
+    "posts": [
+      { "likes": 1320, "comments": 41, "type": "carousel", "time": "afternoon" },
+      { "likes": 1480, "comments": 49, "type": "reel", "time": "evening" },
+      { "likes": 1180, "comments": 35, "type": "image", "time": "morning" },
+      { "likes": 1590, "comments": 52, "type": "carousel", "time": "night" },
+      { "likes": 1250, "comments": 38, "type": "image", "time": "afternoon" },
+      { "likes": 1540, "comments": 50, "type": "reel", "time": "evening" },
+      { "likes": 1360, "comments": 42, "type": "carousel", "time": "morning" },
+      { "likes": 1660, "comments": 54, "type": "reel", "time": "night" }
+    ]
+  },
+  "dermabloom_clinic": {
+    "username": "dermabloom_clinic",
+    "followers": 33000,
+    "bio": "Dermatology clinic educating acne-prone audiences with ingredient-focused skincare routines.",
+    "category": "Beauty",
+    "businessType": "B2C",
+    "hashtags": ["#acneskincareroutine", "#dermrecommended", "#barrierrepair", "#retinolbeginner"],
+    "posts": [
+      { "likes": 1820, "comments": 58, "type": "reel", "time": "evening" },
+      { "likes": 1650, "comments": 49, "type": "carousel", "time": "morning" },
+      { "likes": 1480, "comments": 43, "type": "image", "time": "afternoon" },
+      { "likes": 1930, "comments": 63, "type": "reel", "time": "night" },
+      { "likes": 1690, "comments": 51, "type": "carousel", "time": "evening" },
+      { "likes": 1520, "comments": 44, "type": "image", "time": "morning" },
+      { "likes": 2010, "comments": 66, "type": "reel", "time": "night" },
+      { "likes": 1730, "comments": 53, "type": "carousel", "time": "afternoon" }
+    ]
+  },
+  "quantnest_advisory": {
+    "username": "quantnest_advisory",
+    "followers": 62000,
+    "bio": "Finance advisory helping startup founders with treasury planning, runway modeling, and compliance.",
+    "category": "Finance",
+    "businessType": "B2B",
+    "hashtags": ["#startupfinanceops", "#cashflowmodeling", "#runwayplanning", "#financialcompliance"],
+    "posts": [
+      { "likes": 1580, "comments": 47, "type": "carousel", "time": "morning" },
+      { "likes": 1760, "comments": 57, "type": "reel", "time": "afternoon" },
+      { "likes": 1460, "comments": 43, "type": "image", "time": "night" },
+      { "likes": 1890, "comments": 61, "type": "carousel", "time": "evening" },
+      { "likes": 1520, "comments": 45, "type": "image", "time": "morning" },
+      { "likes": 1830, "comments": 59, "type": "reel", "time": "afternoon" },
+      { "likes": 1640, "comments": 50, "type": "carousel", "time": "night" },
+      { "likes": 1950, "comments": 64, "type": "reel", "time": "evening" }
+    ]
+  },
+  "muralverse_studio": {
+    "username": "muralverse_studio",
+    "followers": 24000,
+    "bio": "Public art studio and mural artist documenting commissions for cafes, schools, and community spaces.",
+    "category": "Art",
+    "businessType": "B2C",
+    "hashtags": ["#muralprocessvideo", "#wallartcommission", "#publicartstudio", "#urbanillustration"],
+    "posts": [
+      { "likes": 1490, "comments": 46, "type": "reel", "time": "evening" },
+      { "likes": 1330, "comments": 39, "type": "carousel", "time": "morning" },
+      { "likes": 1210, "comments": 35, "type": "image", "time": "afternoon" },
+      { "likes": 1610, "comments": 52, "type": "reel", "time": "night" },
+      { "likes": 1370, "comments": 41, "type": "carousel", "time": "evening" },
+      { "likes": 1260, "comments": 37, "type": "image", "time": "morning" },
+      { "likes": 1680, "comments": 54, "type": "reel", "time": "night" },
+      { "likes": 1410, "comments": 42, "type": "carousel", "time": "afternoon" }
+    ]
+  },
+  "gymops_agency": {
+    "username": "gymops_agency",
+    "followers": 39000,
+    "bio": "Growth agency for gym chains focused on lead funnels, memberships, and retention automation.",
+    "category": "Fitness",
+    "businessType": "B2B",
+    "hashtags": ["#gymleadgeneration", "#membershipretention", "#fitnessadfunnel", "#gymmarketingops"],
+    "posts": [
+      { "likes": 1120, "comments": 35, "type": "carousel", "time": "morning" },
+      { "likes": 1280, "comments": 42, "type": "reel", "time": "afternoon" },
+      { "likes": 980, "comments": 29, "type": "image", "time": "night" },
+      { "likes": 1360, "comments": 45, "type": "carousel", "time": "evening" },
+      { "likes": 1040, "comments": 31, "type": "image", "time": "morning" },
+      { "likes": 1320, "comments": 44, "type": "reel", "time": "afternoon" },
+      { "likes": 1180, "comments": 36, "type": "carousel", "time": "night" },
+      { "likes": 1410, "comments": 47, "type": "reel", "time": "evening" }
+    ]
+  },
+  "runwayretail_ai": {
+    "username": "runwayretail_ai",
+    "followers": 128000,
+    "bio": "Retail analytics startup helping fashion chains forecast demand and optimize store assortments.",
+    "category": "Fashion",
+    "businessType": "B2B",
+    "hashtags": ["#retaildemandforecast", "#fashionmerchanalytics", "#assortmentplanning", "#storeinventoryintelligence"],
+    "posts": [
+      { "likes": 3120, "comments": 94, "type": "carousel", "time": "afternoon" },
+      { "likes": 3490, "comments": 113, "type": "reel", "time": "evening" },
+      { "likes": 2810, "comments": 84, "type": "image", "time": "morning" },
+      { "likes": 3660, "comments": 118, "type": "carousel", "time": "night" },
+      { "likes": 2940, "comments": 88, "type": "image", "time": "afternoon" },
+      { "likes": 3580, "comments": 116, "type": "reel", "time": "evening" },
+      { "likes": 3260, "comments": 99, "type": "carousel", "time": "morning" },
+      { "likes": 3740, "comments": 122, "type": "reel", "time": "night" }
+    ]
+  }
+}
