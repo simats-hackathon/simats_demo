@@ -8,12 +8,26 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleAnalyze = async (username) => {
+  const handleAnalyze = async (input) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`http://localhost:5000/api/profiles/${username}`);
-      if (!response.ok) throw new Error('Profile not found');
+      // Construct full URL if input is just username
+      const url = input.startsWith('http') ? input : `https://www.instagram.com/${input}/`;
+      
+      const response = await fetch('http://localhost:5000/api/scrape', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url }),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to analyze profile');
+      }
+      
       const result = await response.json();
       setData(result);
     } catch (err) {

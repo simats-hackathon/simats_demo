@@ -13,14 +13,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// existing routes (keep this as it is)
 app.use('/api/profiles', profileRoutes);
 
 const isInstagramUrl = (value) => {
   if (typeof value !== 'string' || !value.trim()) {
     return false;
   }
-
   try {
     const parsedUrl = new URL(value.trim());
     const hostname = parsedUrl.hostname.replace(/^www\./, '').toLowerCase();
@@ -33,7 +31,6 @@ const isInstagramUrl = (value) => {
 const buildProfileDetails = (posts, sourceUrl) => {
   const firstPost = posts[0] || {};
   const owner = firstPost.owner || {};
-
   return {
     username: firstPost.ownerUsername || owner.username || null,
     fullName: firstPost.ownerFullName || owner.fullName || null,
@@ -44,7 +41,6 @@ const buildProfileDetails = (posts, sourceUrl) => {
   };
 };
 
-// 🔥 MAIN SCRAPE + ANALYZE ROUTE
 app.post("/api/scrape", async (req, res) => {
   const { url, resultsLimit } = req.body || {};
 
@@ -56,8 +52,9 @@ app.post("/api/scrape", async (req, res) => {
   }
 
   try {
-    // Step 1: Get posts data from Apify
-    const posts = await runApify(url, { resultsLimit });
+    // FIX: extract username from URL for Apify
+    const username = url.replace(/\/$/, '').split('/').pop();
+    const posts = await runApify(username, { resultsLimit });
 
     if (!posts || posts.length === 0) {
       return res.status(404).json({
@@ -69,10 +66,8 @@ app.post("/api/scrape", async (req, res) => {
     const profile = buildProfileDetails(posts, url);
     const followers = profile.followers || 0;
 
-    // Step 3: Analyze metrics from scraped posts
     const analysis = analyzeData(posts, followers);
 
-    // Step 4: Enrich with AI business insights
     const aiInput = {
       username: profile.username || null,
       followers,
@@ -82,7 +77,6 @@ app.post("/api/scrape", async (req, res) => {
     };
     const aiAnalysis = await getAIInsights(aiInput);
 
-    // Step 5: Send unified response
     return res.json({
       success: true,
       profile,
@@ -97,7 +91,6 @@ app.post("/api/scrape", async (req, res) => {
 
   } catch (error) {
     console.error('Error:', error);
-
     const status = error.status || 500;
     const message = status === 400 || status === 404
       ? error.message
@@ -118,11 +111,11 @@ app.use((error, req, res, next) => {
       error: 'Invalid JSON body',
     });
   }
-
   return next(error);
 });
 
-// start server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+module.exports = app;
