@@ -1,7 +1,13 @@
 import React from 'react';
 
 const Dashboard = ({ data }) => {
-  if (!data) return null;
+  if (!data) {
+    return (
+      <div className="rounded-lg bg-white p-6 text-gray-600 shadow-md">
+        No data to display. Please analyze a profile.
+      </div>
+    );
+  }
 
   const { username, followers, engagementRate, leadScore, tags, aiAnalysis } = data;
 

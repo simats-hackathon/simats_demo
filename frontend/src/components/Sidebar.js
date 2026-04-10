@@ -3,6 +3,9 @@ import React from 'react';
 const tabs = ['Overview', 'Analytics', 'AI Insights', 'Compare', 'Report', 'Fetched Details'];
 
 const Sidebar = ({ activeTab, setActiveTab, profile }) => {
+  const displayName = profile?.displayName || 'No profile selected';
+  const businessCategory = profile?.businessCategory || 'Analyze a profile to view details';
+
   return (
     <aside className="hidden w-72 flex-col border-r border-slate-200 bg-slate-950 text-white lg:flex">
       <div className="flex h-20 items-center justify-center border-b border-slate-800 px-6 text-center">
@@ -31,12 +34,14 @@ const Sidebar = ({ activeTab, setActiveTab, profile }) => {
       <div className="border-t border-slate-800 p-5">
         <div className="mb-3 text-xs uppercase tracking-[0.2em] text-slate-500">Current Profile</div>
         <div className="rounded-3xl bg-slate-900 p-4 text-sm">
-          <div className="font-semibold text-white">{profile.displayName}</div>
-          <div className="mt-2 text-slate-400">{profile.businessCategory}</div>
-          <div className="mt-3 flex flex-wrap gap-2 text-xs">
-            <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-200">{profile.interestLevel} Interest</span>
-            <span className="rounded-full bg-sky-500/10 px-3 py-1 text-sky-200">{profile.audienceType}</span>
-          </div>
+          <div className="font-semibold text-white">{displayName}</div>
+          <div className="mt-2 text-slate-400">{businessCategory}</div>
+          {profile && (
+            <div className="mt-3 flex flex-wrap gap-2 text-xs">
+              <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-emerald-200">{profile.interestLevel} Interest</span>
+              <span className="rounded-full bg-sky-500/10 px-3 py-1 text-sky-200">{profile.audienceType}</span>
+            </div>
+          )}
         </div>
       </div>
     </aside>

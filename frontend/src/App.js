@@ -173,27 +173,24 @@ const mapScrapeToProfile = (scrapeData, baseProfile) => {
 
 function App() {
   const [activeTab, setActiveTab] = useState('Overview');
-  const [selectedProfile, setSelectedProfile] = useState(mockProfiles[0].username);
+  const [selectedProfile, setSelectedProfile] = useState(NONE_PROFILE);
   const [usernameInput, setUsernameInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [profile, setProfile] = useState(mockProfiles[0]);
+  const [profile, setProfile] = useState(null);
 
   const selectedMockProfile = useMemo(
-    () => mockProfiles.find((item) => item.username === selectedProfile) || mockProfiles[0],
+    () => mockProfiles.find((item) => item.username === selectedProfile) || null,
     [selectedProfile]
   );
-
-  useEffect(() => {
-    if (selectedProfile !== NONE_PROFILE) {
-      setProfile(selectedMockProfile);
-      setError('');
-    }
-  }, [selectedMockProfile, selectedProfile]);
 
   const runApiAnalysis = async (rawValue) => {
     const username = extractUsername(rawValue);
     const url = buildInstagramUrl(rawValue);
+
+    // Always clear stale dashboard data before a new analysis request.
+    setProfile(null);
+
     if (!username || !url || username === 'instagram.com') {
       setError('Enter a valid username');
       return;
@@ -215,7 +212,7 @@ function App() {
 
       const scrapeData = await scrapeResponse.json();
       const matchedMock = mockProfiles.find((item) => item.username === username);
-      const baseProfile = matchedMock || profile || mockProfiles[0];
+      const baseProfile = matchedMock || mockProfiles[0];
 
       setProfile(mapScrapeToProfile(scrapeData, baseProfile));
       setSelectedProfile(NONE_PROFILE);
@@ -232,7 +229,7 @@ function App() {
 
         const data = await response.json();
         const matchedMock = mockProfiles.find((item) => item.username === username);
-        const baseProfile = matchedMock || profile || mockProfiles[0];
+        const baseProfile = matchedMock || mockProfiles[0];
         setProfile(mapApiToProfile(data, baseProfile));
         setSelectedProfile(matchedMock ? matchedMock.username : NONE_PROFILE);
       } catch (fetchError) {
@@ -244,6 +241,16 @@ function App() {
   };
 
   const handleAnalyze = async () => {
+    const hasUrlInput = extractUsername(usernameInput).length > 0;
+
+    if (selectedProfile === NONE_PROFILE && !hasUrlInput) {
+      window.alert('Please enter a URL or select a mock profile');
+      return;
+    }
+
+    // Always clear stale dashboard data before loading new results.
+    setProfile(null);
+
     if (selectedProfile === NONE_PROFILE) {
       await runApiAnalysis(usernameInput);
       return;
@@ -251,11 +258,18 @@ function App() {
 
     setError('');
     setLoading(true);
+    if (!selectedMockProfile) {
+      window.alert('Please enter a URL or select a mock profile');
+      setLoading(false);
+      return;
+    }
+
     setProfile(selectedMockProfile);
     setLoading(false);
   };
 
   const showEnterButton = extractUsername(usernameInput).length > 0;
+  const disableAnalyze = selectedProfile === NONE_PROFILE && !showEnterButton;
 
   if (loading) {
     return (
@@ -331,7 +345,12 @@ function App() {
 
               <button
                 onClick={handleAnalyze}
-                className="rounded-2xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700"
+                disabled={disableAnalyze}
+                className={`rounded-2xl px-5 py-3 text-sm font-semibold text-white transition ${
+                  disableAnalyze
+                    ? 'cursor-not-allowed bg-slate-400'
+                    : 'bg-slate-900 hover:bg-slate-700'
+                }`}
               >
                 Analyze
               </button>
@@ -355,12 +374,20 @@ function App() {
           </div>
 
           <div className="rounded-3xl bg-slate-50 p-4 shadow-inner shadow-slate-100 sm:p-6">
-            {activeTab === 'Overview' && <Overview profile={profile} />}
-            {activeTab === 'Analytics' && <Analytics profile={profile} />}
-            {activeTab === 'AI Insights' && <AIInsights profile={profile} />}
-            {activeTab === 'Compare' && <Compare profiles={mockProfiles} />}
-            {activeTab === 'Report' && <Report profile={profile} />}
-            {activeTab === 'Fetched Details' && <FetchedDetails profile={profile} />}
+            {!profile ? (
+              <div className="rounded-3xl border border-slate-200 bg-white p-8 text-slate-700 shadow-sm">
+                No data to display. Please analyze a profile.
+              </div>
+            ) : (
+              <>
+                {activeTab === 'Overview' && <Overview profile={profile} />}
+                {activeTab === 'Analytics' && <Analytics profile={profile} />}
+                {activeTab === 'AI Insights' && <AIInsights profile={profile} />}
+                {activeTab === 'Compare' && <Compare profiles={mockProfiles} />}
+                {activeTab === 'Report' && <Report profile={profile} />}
+                {activeTab === 'Fetched Details' && <FetchedDetails profile={profile} />}
+              </>
+            )}
           </div>
         </main>
       </div>
