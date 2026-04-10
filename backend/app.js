@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const profileRoutes = require('./routes/profileRoutes');
+const instagramRoutes = require('./routes/instagramRoutes');
 const { runApify } = require('./services/apifyService');
 const { analyzeData } = require('./services/analysisService');
 const { getAIInsights } = require('./services/aiService');
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/profiles', profileRoutes);
+app.use('/api/instagram', instagramRoutes);
 
 const isInstagramUrl = (value) => {
   if (typeof value !== 'string' || !value.trim()) {
@@ -51,9 +53,8 @@ app.post("/api/scrape", async (req, res) => {
     });
   }
 
-  try {
-    // FIX: extract username from URL for Apify
-    const username = url.replace(/\/$/, '').split('/').pop();
+  try {Pass full URL to runApify for proper validation
+    const posts = await runApify(url').split('/').pop();
     const posts = await runApify(username, { resultsLimit });
 
     if (!posts || posts.length === 0) {
