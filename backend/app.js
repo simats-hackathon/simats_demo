@@ -47,6 +47,8 @@ const buildProfileDetails = (posts, sourceUrl) => {
 // 🔥 MAIN SCRAPE + ANALYZE ROUTE
 app.post("/api/scrape", async (req, res) => {
   const { url, resultsLimit } = req.body || {};
+  console.log('🔥 [Scrape] Incoming request body:', req.body || {});
+  console.log('🌐 [Scrape] Received URL:', url || null);
 
   if (!isInstagramUrl(url)) {
     return res.status(400).json({
@@ -58,6 +60,10 @@ app.post("/api/scrape", async (req, res) => {
   try {
     // Step 1: Get posts data from Apify
     const posts = await runApify(url, { resultsLimit });
+    console.log('📦 [Scrape] Scraped data from Apify:', {
+      postCount: Array.isArray(posts) ? posts.length : 0,
+      preview: Array.isArray(posts) ? posts.slice(0, 2) : [],
+    });
 
     if (!posts || posts.length === 0) {
       return res.status(404).json({
@@ -71,6 +77,7 @@ app.post("/api/scrape", async (req, res) => {
 
     // Step 3: Analyze metrics from scraped posts
     const analysis = analyzeData(posts, followers);
+    console.log('📊 [Scrape] Processed analysis output:', analysis);
 
     // Step 4: Enrich with AI business insights
     const aiInput = {
@@ -81,6 +88,7 @@ app.post("/api/scrape", async (req, res) => {
       tags: analysis.hashtags || [],
     };
     const aiAnalysis = await getAIInsights(aiInput);
+    console.log('🤖 [Scrape] AI analysis output:', aiAnalysis);
 
     // Step 5: Send unified response
     return res.json({
@@ -96,7 +104,12 @@ app.post("/api/scrape", async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('❌ [Scrape] Error while processing /api/scrape:', {
+      message: error?.message,
+      status: error?.status || 500,
+      details: error?.details,
+      stack: error?.stack,
+    });
 
     const status = error.status || 500;
     const message = status === 400 || status === 404

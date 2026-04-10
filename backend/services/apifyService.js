@@ -67,6 +67,10 @@ const normalizePost = (item) => ({
 });
 
 const runApify = async (url, options = {}) => {
+  console.log('🔥 [Apify] Starting Instagram scrape request');
+  console.log('🌐 [Apify] Input URL:', url || null);
+  console.log('🌐 [Apify] APIFY_TOKEN present:', Boolean(API_TOKEN));
+
   if (!API_TOKEN) {
     throw createError(500, 'APIFY_TOKEN is missing from the environment');
   }
@@ -86,6 +90,7 @@ const runApify = async (url, options = {}) => {
 
   for (const actorId of ACTOR_ID_CANDIDATES) {
     const endpoint = buildApifyEndpoint(actorId);
+    console.log('🌐 [Apify] Calling actor endpoint:', { actorId, resultsLimit });
     const response = await fetchRequest(`${endpoint}?token=${encodeURIComponent(API_TOKEN)}`, {
       method: 'POST',
       headers: {
@@ -95,17 +100,30 @@ const runApify = async (url, options = {}) => {
     });
 
     const rawBody = await response.text();
+    console.log('📦 [Apify] Raw response preview:', {
+      actorId,
+      status: response.status,
+      ok: response.ok,
+      bodyPreview: rawBody.slice(0, 500),
+    });
+
     let payload;
 
     try {
       payload = rawBody ? JSON.parse(rawBody) : [];
     } catch {
+      console.error('❌ [Apify] Failed to parse response JSON');
       throw createError(502, 'Apify returned an invalid response', rawBody.slice(0, 500));
     }
 
     if (!response.ok) {
       const message = payload?.error?.message || payload?.error || rawBody || 'Apify request failed';
       const currentError = createError(response.status, message, payload);
+      console.error('❌ [Apify] API request failed:', {
+        actorId,
+        status: response.status,
+        message,
+      });
 
       if (response.status === 404) {
         lastError = currentError;
@@ -121,9 +139,15 @@ const runApify = async (url, options = {}) => {
         ? payload.items
         : [];
 
+    console.log('📦 [Apify] Normalized items count:', items.length);
+
     return items.map(normalizePost);
   }
 
+  console.error('❌ [Apify] All actor candidates failed', {
+    lastError: lastError?.message || null,
+    status: lastError?.status || null,
+  });
   throw lastError || createError(404, 'Apify actor endpoint not found');
 };
 
