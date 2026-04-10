@@ -184,6 +184,12 @@ function App() {
     [selectedProfile]
   );
 
+  useEffect(() => {
+    if (selectedProfile === NONE_PROFILE && !usernameInput.trim()) {
+      setProfile(null);
+    }
+  }, [selectedProfile, usernameInput]);
+
   const runApiAnalysis = async (rawValue) => {
     const username = extractUsername(rawValue);
     const url = buildInstagramUrl(rawValue);
@@ -299,7 +305,11 @@ function App() {
                 <select
                   value={selectedProfile}
                   onChange={(e) => {
-                    setSelectedProfile(e.target.value);
+                    const nextValue = e.target.value;
+                    setSelectedProfile(nextValue);
+                    if (nextValue === NONE_PROFILE) {
+                      setProfile(null);
+                    }
                     setError('');
                   }}
                   className="rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-slate-900 shadow-sm focus:border-slate-500 focus:outline-none"
